@@ -1,1 +1,3007 @@
-404: Not Found
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <link rel="icon" type="image/png" href="VRM.png">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <title>ORDER SP VRM</title>
+    
+    <!-- Import Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* === GLOBAL STYLE === */
+body {
+    font-family: 'Montserrat', sans-serif;
+    background: url('bgweb.png') no-repeat center center fixed;
+    background-size: cover;
+    padding: 20px;
+    text-align: center;
+    color: #fff; /* default text putih */
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+}
+
+#searchBox {
+    padding: 10px;
+    width: 90%;
+    max-width: 300px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    font-family: 'Montserrat', sans-serif;
+}
+        
+/* === MAIN BOX === */
+.main-box {
+    background-color: rgba(255, 255, 255, 0.08); /* transparan */
+    padding: 20px 30px;
+    border-radius: 15px;
+    width: 90%;
+    max-width: 1000px;
+    margin: 20px auto;
+    
+
+    /* DOUBLE GLOW: merah + ungu */
+    box-shadow: 
+        0 8px 20px rgba(255, 0, 0, 0.35),   /* glow merah */
+        0 0 35px rgba(106, 13, 173, 0.6);  /* glow ungu */
+    
+}
+
+/* Responsive HP */
+@media (max-width: 768px) {
+    body {
+        padding: 0 10px;   /* jarak kiri kanan */
+    }
+    .main-box {
+        width: 100%;       /* biar full hampir ke tepi */
+        margin: 10px auto;
+        margin: 15px 20px;
+    }
+}
+
+/* Responsive layar besar (monitor gede) */
+@media (min-width: 1400px) {
+    .main-box {
+        max-width: 1200px; /* biar nggak keliatan kekecilan */
+        padding: 40px;
+    }
+}       
+        
+/* === CATEGORY CARD === */
+    .category {
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 600;
+        background: #6a0dad; /* ungu tua */
+        color: white;
+        padding: 10px;
+        margin: 10px auto;
+        cursor: pointer;
+        width: 90%;
+        max-width: 600px;
+        border-radius: 5px;
+        box-shadow: 0 6px #4b0082;
+        text-align: left;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        transition: background 0.3s, transform 0.3s;
+    }
+    .category img {
+        width: 40px;
+        height: 40px;
+        object-fit: cover;
+        border-radius: 5px;
+    }
+    .category:hover {
+        background-color: #7d27c1; /* ungu lebih terang saat hover */
+        transform: scale(1.05);
+        box-shadow: 0 8px #4b0082;
+    }
+    
+    /* === SPAREPART LIST === */
+    .spareparts {
+        max-height: 0;
+        overflow-y: auto;
+        transition: max-height 0.4s ease-out, padding 0.3s ease;
+        margin: 0 auto;
+        background: rgba(255, 255, 255, 0.6);
+        border-radius: 5px;
+        width: 80%;
+        max-width: 400px;
+        padding: 0 10px;
+        text-align: left;
+    }
+    .spareparts.open {
+        max-height: 600px;
+        padding: 10px;
+    }
+    .spareparts li {
+        list-style: none;
+        padding: 5px 0;
+        border-bottom: 1px solid #ddd;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 500;
+        color: #222; /* biar kontras dengan background putih */
+    }
+    .spareparts li img.spare-img {
+        width: 40px;
+        height: 40px;
+        object-fit: cover;
+        border-radius: 5px;
+    }
+    
+    /* === BUTTON === */
+    .btn {
+        font-family: 'Montserrat', sans-serif;
+        font-weight: bold;
+        padding: 15px 30px;
+        background-color: #6a0dad; /* ungu tua */
+        color: #ffffff;
+        text-decoration: none;
+        font-size: 1.2rem;
+        border-radius: 10px;
+        box-shadow: 0 6px #4b0082;
+        transition: all 0.3s ease;
+    }
+    .btn:hover {
+        background-color: #7d27c1;
+        transform: scale(1.05);
+        box-shadow: 0 8px #4b0082;
+    }
+    .btn:active {
+        transform: translateY(2px);
+        box-shadow: 0 4px #2b4afc;
+    }
+    
+    /* === IMAGE PREVIEW === */
+    .large-image {
+        display: none;
+        width: 200px;
+        height: 200px;
+        object-fit: cover;
+        border-radius: 5px;
+        margin-top: 10px;
+        margin-left: 10px;
+    }
+    .show-large-image {
+        display: block;
+    }
+    .show-large-image .small-image,
+    .show-large-image .spare-text {
+        display: none;
+    }
+    /* === Keranjang === */
+    #cart-icon {
+        position: fixed;
+        top: 20px;
+        right: 30px;
+        background: rgba(255, 255, 255, 0.9);
+        padding: 10px 15px;
+        border-radius: 10px;
+        box-shadow: 0 0 20px rgba(106,13,173,0.7);
+        cursor: pointer;
+        z-index: 1000;
+    }
+    #cart-count {
+        font-family: 'Montserrat', sans-serif;
+        background: red;
+        color: white;
+        border-radius: 50%;
+        padding: 2px 6px;
+        font-size: 12px;
+        position: absolute;
+        top: 0;
+        right: 0;
+        transform: translate(50%,-50%);
+    }
+    #cart-sidebar {
+      position: fixed;
+      top: 0;
+      right: -400px;
+      width: 350px;
+      height: 100%;
+      background: linear-gradient(180deg, rgba(178,82,255,0.85) 0%, rgba(60,0,100,0.85) 100%);
+      box-shadow: -4px 0 25px rgba(0,0,0,0.4);
+      transition: right 0.4s ease;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      z-index: 999;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+    #cart-items {
+      background: transparent !important;
+    }
+    #cart-sidebar.open { right: 0; }
+    #cart-items { flex: 1; overflow-y: auto; text-align: left; padding: 15px; }
+    .cart-item { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+    .cart-item span { font-size: 14px; }
+    .remove-btn {
+        background: transparent;
+        border: none;
+        color: #ff8080;
+        font-size: 16px;
+    }
+    #checkout-btn:hover { background: #7d27c1; color: white; }
+
+    .btn-add {
+      font-family: 'Montserrat', sans-serif;
+      background-color: #6a0dad; /* ungu elegan */
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      box-shadow: 0 4px 0 #4b0082;
+    }
+    
+    /* Efek hover */
+    .btn-add:hover {
+      background-color: #8b00ff;
+      transform: scale(1.07);
+      box-shadow: 0 6px 10px rgba(107, 0, 255, 0.3);
+    }
+    
+    /* Efek saat tombol ditekan */
+    .btn-add:active {
+      transform: scale(0.95);
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    }
+
+    @keyframes cartShake {
+      0% { transform: rotate(0deg); }
+      25% { transform: rotate(-10deg); }
+      50% { transform: rotate(10deg); }
+      75% { transform: rotate(-8deg); }
+      100% { transform: rotate(0deg); }
+    }
+    
+    .cart-shake {
+      animation: cartShake 0.4s ease;
+    }
+
+    #print-btn {
+      background-color: #444;
+      color: white;
+      margin-top: 10px;
+      font-size: 0.9rem;
+    }
+    #print-btn:hover {
+      background-color: #666;
+      transform: scale(1.05);
+    }
+    #logoutBtn:hover {
+      background-color: #e74c3c;
+      transform: scale(1.05);
+    }
+    </style>
+</head>
+<body>
+  <!-- konten halaman kamu di bawah -->
+    <div id="cart-icon">🛒<span id="cart-count">0</span></div>
+    <div id="cart-sidebar">
+    <h2 style="text-align:center; margin-top:20px;">CART</h2>
+    <div class="cart-info">
+      <label>Nama Produk:</label>
+      <input type="text" id="productName" placeholder="Masukkan nama produk..." style="width:100%; margin-bottom:8px; border:none; border-radius:4px; padding:5px;">
+      <label>Nomor SN:</label>
+      <input type="text" id="serialNumber" placeholder="Masukkan nomor SN..." style="width:100%; border:none; border-radius:4px; padding:5px;">
+      <label>Keterangan:</label>
+      <input type="text" id="Keterangan" placeholder="Masukkan keterangan..." style="width:100%; border:none; border-radius:4px; padding:5px;">
+    </div>
+    <div id="cart-items"></div>
+    <button id="checkout-btn" class="btn">Checkout via WhatsApp</button>
+    <button id="print-btn" class="btn">🖨️ Print Data</button>
+    <button id="logoutBtn" class="btn" style="background-color: #b22222; margin-top:10px;">🚪 Logout</button>
+    </div>
+    <div class="main-box">
+    <h1>KATALOG</h1>
+
+    <input type="text" id="searchBox" placeholder="Cari sparepart...">
+
+    <div class="category" onclick="toggleSpareparts(0)">
+        <img src="images/cervical.png" alt="DR LASER EVO">
+        DR QYU CERVICAL
+        <span class="arrow">▶</span>
+    </div>
+    <ul class="spareparts">
+      <li onclick="showImage(this)">
+        <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZCTD.ABT - AIRBAG TRAY CERVICAL')">ORDER</button>
+        <img src="images/abt.png" alt="ZCTD.ABT" class="spare-img small-image">
+        <span class="spare-text">ZCTD.ABT - AIRBAG TRAY CERVICAL</span>
+        <img src="images/abt.png" alt="ZCTD.ABT" class="large-image">
+      </li>
+    
+      <li onclick="showImage(this)">
+        <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZCTD.APUMP - AIRPUMP CERVICAL')">ORDER</button>
+        <img src="images/apump.png" alt="ZCTD.APUMP" class="spare-img small-image">
+        <span class="spare-text">ZCTD.APUMP - AIRPUMP CERVICAL</span>
+        <img src="images/apump.png" alt="ZCTD.APUMP" class="large-image">
+      </li>
+    
+      <li onclick="showImage(this)">
+        <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZCTD.BOLT - BOLT CERVICAL')">ORDER</button>
+        <img src="images/bolt.png" alt="ZCTD.BOLT" class="spare-img small-image">
+        <span class="spare-text">ZCTD.BOLT - BOLT CERVICAL</span>
+        <img src="images/bolt.png" alt="ZCTD.BOLT" class="large-image">
+      </li>
+    
+      <li onclick="showImage(this)">
+        <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZCTD.CC8P - CONTROL CABLE 8 PIN CERVICAL')">ORDER</button>
+        <img src="images/cc8p.png" alt="ZCTD.CC8P" class="spare-img small-image">
+        <span class="spare-text">ZCTD.CC8P - CONTROL CABLE 8 PIN CERVICAL</span>
+        <img src="images/cc8p.png" alt="ZCTD.CC8P" class="large-image">
+      </li>
+    
+      <li onclick="showImage(this)">
+        <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZCTD.MPL - MOUNT PLATE LOW FREQUENCY CERVICAL')">ORDER</button>
+        <img src="images/mpl.png" alt="ZCTD.MPL" class="spare-img small-image">
+        <span class="spare-text">ZCTD.MPL - MOUNT PLATE LOW FREQUENCY CERVICAL</span>
+        <img src="images/mpl.png" alt="ZCTD.MPL" class="large-image">
+      </li>
+    
+      <li onclick="showImage(this)">
+        <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZCTD.NP - NECK PAD CERVICAL')">ORDER</button>
+        <img src="images/np.png" alt="ZCTD.NP" class="spare-img small-image">
+        <span class="spare-text">ZCTD.NP - NECK PAD CERVICAL</span>
+        <img src="images/np.png" alt="ZCTD.NP" class="large-image">
+      </li>
+    
+      <li onclick="showImage(this)">
+        <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZCTD.CLIST - CONTROL LIST CERVICAL')">ORDER</button>
+        <img src="images/clist.png" alt="ZCTD.CLIST" class="spare-img small-image">
+        <span class="spare-text">ZCTD.CLIST - CONTROL LIST CERVICAL</span>
+        <img src="images/clist.png" alt="ZCTD.CLIST" class="large-image">
+      </li>
+    
+      <li onclick="showImage(this)">
+        <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZCTD.CLOW - CONTROL LOWER CASE CERVICAL')">ORDER</button>
+        <img src="images/clow.png" alt="ZCTD.CLOW" class="spare-img small-image">
+        <span class="spare-text">ZCTD.CLOW - CONTROL LOWER CASE CERVICAL</span>
+        <img src="images/clow.png" alt="ZCTD.CLOW" class="large-image">
+      </li>
+    
+      <li onclick="showImage(this)">
+        <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZCTD.CUP - CONTROL UPPER CASE CERVICAL')">ORDER</button>
+        <img src="images/cup.png" alt="ZCTD.CUP" class="spare-img small-image">
+        <span class="spare-text">ZCTD.CUP - CONTROL UPPER CASE CERVICAL</span>
+        <img src="images/cup.png" alt="ZCTD.CUP" class="large-image">
+      </li>
+    
+      <li onclick="showImage(this)">
+        <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZCTD.FLC - FLASH LIGHT CASE CERVICAL')">ORDER</button>
+        <img src="images/flc.png" alt="ZCTD.FLC" class="spare-img small-image">
+        <span class="spare-text">ZCTD.FLC - FLASH LIGHT CASE CERVICAL</span>
+        <img src="images/flc.png" alt="ZCTD.FLC" class="large-image">
+      </li>
+    
+      <li onclick="showImage(this)">
+        <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZCTD.LCD - LCD SCREEN CERVICAL')">ORDER</button>
+        <img src="images/lcd.png" alt="ZCTD.LCD" class="spare-img small-image">
+        <span class="spare-text">ZCTD.LCD - LCD SCREEN CERVICAL</span>
+        <img src="images/lcd.png" alt="ZCTD.LCD" class="large-image">
+      </li>
+    
+      <li onclick="showImage(this)">
+        <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZCTD.LCTB - LOWER CASE TRANSPARENT BOX CERVICAL')">ORDER</button>
+        <img src="images/lctb.png" alt="ZCTD.LCTB" class="spare-img small-image">
+        <span class="spare-text">ZCTD.LCTB - LOWER CASE TRANSPARENT BOX CERVICAL</span>
+        <img src="images/lctb.png" alt="ZCTD.LCTB" class="large-image">
+      </li>
+    
+      <li onclick="showImage(this)">
+        <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZCTD.PVL - PLASTIK VALVE CERVICAL')">ORDER</button>
+        <img src="images/pvl.png" alt="ZCTD.PVL" class="spare-img small-image">
+        <span class="spare-text">ZCTD.PVL - PLASTIK VALVE CERVICAL</span>
+        <img src="images/pvl.png" alt="ZCTD.PVL" class="large-image">
+      </li>
+    
+      <li onclick="showImage(this)">
+        <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZCTD.RPS - ROUND PROTECTOR SHEET CERVICAL')">ORDER</button>
+        <img src="images/rps.png" alt="ZCTD.RPS" class="spare-img small-image">
+        <span class="spare-text">ZCTD.RPS - ROUND PROTECTOR SHEET CERVICAL</span>
+        <img src="images/rps.png" alt="ZCTD.RPS" class="large-image">
+      </li>
+    
+      <li onclick="showImage(this)">
+        <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZCTD.TPB - TRANSPARENT BOX CERVICAL')">ORDER</button>
+        <img src="images/tpb.png" alt="ZCTD.TPB" class="spare-img small-image">
+        <span class="spare-text">ZCTD.TPB - TRANSPARENT BOX CERVICAL</span>
+        <img src="images/tpb.png" alt="ZCTD.TPB" class="large-image">
+      </li>
+    
+      <li onclick="showImage(this)">
+        <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZCTD.DC12 DC - 12V CONNECTOR CERVICAL')">ORDER</button>
+        <img src="images/dc12.png" alt="ZCTD.DC12" class="spare-img small-image">
+        <span class="spare-text">ZCTD.DC12 DC - 12V CONNECTOR CERVICAL</span>
+        <img src="images/dc12.png" alt="ZCTD.DC12" class="large-image">
+      </li>
+    
+      <li onclick="showImage(this)">
+        <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZCTD.CRB - CONTROL RUBBER BUTTON CERVICAL')">ORDER</button>
+        <img src="images/crb.png" alt="ZCTD.CRB" class="spare-img small-image">
+        <span class="spare-text">ZCTD.CRB - CONTROL RUBBER BUTTON CERVICAL</span>
+        <img src="images/crb.png" alt="ZCTD.CRB" class="large-image">
+      </li>
+    
+      <li onclick="showImage(this)">
+        <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZCTD.SFM - SUPPORT FRAME CERVICAL')">ORDER</button>
+        <img src="images/sfm.png" alt="ZCTD.SFM" class="spare-img small-image">
+        <span class="spare-text">ZCTD.SFM - SUPPORT FRAME CERVICAL</span>
+        <img src="images/sfm.png" alt="ZCTD.SFM" class="large-image">
+      </li>
+    
+      <li onclick="showImage(this)">
+        <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZCTD.LCOV - LOWER CASE CERVICAL')">ORDER</button>
+        <img src="images/lcov.png" alt="ZCTD.LCOV" class="spare-img small-image">
+        <span class="spare-text">ZCTD.LCOV - LOWER CASE CERVICAL</span>
+        <img src="images/lcov.png" alt="ZCTD.LCOV" class="large-image">
+      </li>
+    
+      <li onclick="showImage(this)">
+        <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZCTD.UCOV - UPPER CASE CERVICAL')">ORDER</button>
+        <img src="images/ucov.png" alt="ZCTD.UCOV" class="spare-img small-image">
+        <span class="spare-text">ZCTD.UCOV - UPPER CASE CERVICAL</span>
+        <img src="images/ucov.png" alt="ZCTD.UCOV" class="large-image">
+      </li>
+    
+      <li onclick="showImage(this)">
+        <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZCTD.RCB - REMOTE CIRCUIT BOARD CERVICAL')">ORDER</button>
+        <img src="images/rcb.png" alt="ZCTD.RCB" class="spare-img small-image">
+        <span class="spare-text">ZCTD.RCB - REMOTE CIRCUIT BOARD CERVICAL</span>
+        <img src="images/rcb.png" alt="ZCTD.RCB" class="large-image">
+      </li>
+    
+      <li onclick="showImage(this)">
+        <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZCTD.GBX - GIFT BOX CERVICAL')">ORDER</button>
+        <img src="it.png" alt="ZCTD.GBX" class="spare-img small-image">
+        <span class="spare-text">ZCTD.GBX - GIFT BOX CERVICAL</span>
+        <img src="it.png" alt="ZCTD.GBX" class="large-image">
+      </li>
+    
+      <li onclick="showImage(this)">
+        <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZCTD.L1A - ADAPTOR SET 1A CERVICAL')">ORDER</button>
+        <img src="it.png" alt="ZCTD.L1A" class="spare-img small-image">
+        <span class="spare-text">ZCTD.L1A - ADAPTOR SET 1A CERVICAL</span>
+        <img src="it.png" alt="ZCTD.L1A" class="large-image">
+      </li>
+    
+      <li onclick="showImage(this)">
+        <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('DRQ - HANDLE DUS LUMBAR')">ORDER</button>
+        <img src="images/handle.png" alt="DRQ.HANDLE" class="spare-img small-image">
+        <span class="spare-text">DRQ - HANDLE DUS LUMBAR</span>
+        <img src="images/handle.png" alt="DRQ.HANDLE" class="large-image">
+      </li>
+    
+      <li onclick="showImage(this)">
+        <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZLMB.MLD - MOLDING')">ORDER</button>
+        <img src="images/molding.png" alt="ZLMB.MLD" class="spare-img small-image">
+        <span class="spare-text">ZLMB.MLD - MOLDING</span>
+        <img src="images/molding.png" alt="ZLMB.MLD" class="large-image">
+      </li>
+    </ul>
+
+     <div class="category" onclick="toggleSpareparts(1)">
+        <img src="ijh.png" alt="DR LASER EVO">
+        DR QYU LUMBAR
+        <span class="arrow">▶</span>
+    </div>
+    <ul class="spareparts">
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZLMB.ADTR - ADAPTOR FOR LUMBAR')">ORDER</button>
+          <img src="lumbartd/ZLMB-ADTR.png" alt="ZLMB-ADTR" class="spare-img small-image">
+          <span class="spare-text">ZLMB.ADTR - ADAPTOR FOR LUMBAR</span>
+          <img src="lumbartd/ZLMB-ADTR.png" alt="ZLMB-ADTR" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZLMB.PLBB - PC LIGHT BLOCKING BOARD')">ORDER</button>
+          <img src="lumbartd/ZLMB-PLBB.png" alt="ZLMB-PLBB" class="spare-img small-image">
+          <span class="spare-text">ZLMB.PLBB - PC LIGHT BLOCKING BOARD</span>
+          <img src="lumbartd/ZLMB-PLBB.png" alt="ZLMB-PLBB" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZLMB.SCR - SCREW')">ORDER</button>
+          <img src="lumbartd/ZLMB-SCR.png" alt="ZLMB-SCR" class="spare-img small-image">
+          <span class="spare-text">ZLMB.SCR - SCREW</span>
+          <img src="lumbartd/ZLMB-SCR.png" alt="ZLMB-SCR" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZLMB.ABP - AIRBAG PALLET')">ORDER</button>
+          <img src="lumbartd/ZLMB-ABP.png" alt="ZLMB-ABP" class="spare-img small-image">
+          <span class="spare-text">ZLMB.ABP - AIRBAG PALLET</span>
+          <img src="lumbartd/ZLMB-ABP.png" alt="ZLMB-ABP" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZLMB.APMC - AIR PUMP MOTOR CASE')">ORDER</button>
+          <img src="lumbartd/ZLMB-APMC.png" alt="ZLMB-APMC" class="spare-img small-image">
+          <span class="spare-text">ZLMB.APMC - AIR PUMP MOTOR CASE</span>
+          <img src="lumbartd/ZLMB-APMC.png" alt="ZLMB-APMC" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZLMB.MCV - MOTOR CASE')">ORDER</button>
+          <img src="lumbartd/ZLMB-MCV.png" alt="ZLMB-MCV" class="spare-img small-image">
+          <span class="spare-text">ZLMB.MCV - MOTOR CASE</span>
+          <img src="lumbartd/ZLMB-MCV.png" alt="ZLMB-MCV" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZLMB.SBP - SILICON BUTTON PAD')">ORDER</button>
+          <img src="lumbartd/ZLMB-SBP.png" alt="ZLMB-SBP" class="spare-img small-image">
+          <span class="spare-text">ZLMB.SBP - SILICON BUTTON PAD</span>
+          <img src="lumbartd/ZLMB-SBP.png" alt="ZLMB-SBP" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZLMB.PCC - PC CASE')">ORDER</button>
+          <img src="lumbartd/ZLMB-PCC.png" alt="ZLMB-PCC" class="spare-img small-image">
+          <span class="spare-text">ZLMB.PCC - PC CASE</span>
+          <img src="lumbartd/ZLMB-PCC.png" alt="ZLMB-PCC" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZLMB.UCV - UPPER CASE')">ORDER</button>
+          <img src="lumbartd/ZLMB-UCV.png" alt="ZLMB-UCV" class="spare-img small-image">
+          <span class="spare-text">ZLMB.UCV - UPPER CASE</span>
+          <img src="lumbartd/ZLMB-UCV.png" alt="ZLMB-UCV" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZLMB.AP - AIR PUMP')">ORDER</button>
+          <img src="lumbartd/ZLMB-AP.png" alt="ZLMB-AP" class="spare-img small-image">
+          <span class="spare-text">ZLMB.AP - AIR PUMP</span>
+          <img src="lumbartd/ZLMB-AP.png" alt="ZLMB-AP" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZLMB.DCB - DC BASE')">ORDER</button>
+          <img src="lumbartd/ZLMB-DCB.png" alt="ZLMB-DCB" class="spare-img small-image">
+          <span class="spare-text">ZLMB.DCB - DC BASE</span>
+          <img src="lumbartd/ZLMB-DCB.png" alt="ZLMB-DCB" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZLMB.EHF - ELECTRIC HEATING FILM')">ORDER</button>
+          <img src="lumbartd/ZLMB-EHF.png" alt="ZLMB-EHF" class="spare-img small-image">
+          <span class="spare-text">ZLMB.EHF - ELECTRIC HEATING FILM</span>
+          <img src="lumbartd/ZLMB-EHF.png" alt="ZLMB-EHF" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZLMB.HCR - HAND CONTROLLER')">ORDER</button>
+          <img src="lumbartd/ZLMB-HCR.png" alt="ZLMB-HCR" class="spare-img small-image">
+          <span class="spare-text">ZLMB.HCR - HAND CONTROLLER</span>
+          <img src="lumbartd/ZLMB-HCR.png" alt="ZLMB-HCR" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZLMB.MLD - MOLDING')">ORDER</button>
+          <img src="lumbartd/ZLMB-MLD.png" alt="ZLMB-MLD" class="spare-img small-image">
+          <span class="spare-text">ZLMB.MLD - MOLDING</span>
+          <img src="lumbartd/ZLMB-MLD.png" alt="ZLMB-MLD" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZLMB.SVL - SOLENOID VALVE')">ORDER</button>
+          <img src="lumbartd/ZLMB-SVL.png" alt="ZLMB-SVL" class="spare-img small-image">
+          <span class="spare-text">ZLMB.SVL - SOLENOID VALVE</span>
+          <img src="lumbartd/ZLMB-SVL.png" alt="ZLMB-SVL" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZLMB.TMR - THERMISTOR')">ORDER</button>
+          <img src="lumbartd/ZLMB-TMR.png" alt="ZLMB-TMR" class="spare-img small-image">
+          <span class="spare-text">ZLMB.TMR - THERMISTOR</span>
+          <img src="lumbartd/ZLMB-TMR.png" alt="ZLMB-TMR" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZLMB.CB - CIRCUIT BOARD')">ORDER</button>
+          <img src="lumbartd/ZLMB-CB.png" alt="ZLMB-CB" class="spare-img small-image">
+          <span class="spare-text">ZLMB.CB - CIRCUIT BOARD</span>
+          <img src="lumbartd/ZLMB-CB.png" alt="ZLMB-CB" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZLMB.LCV - LOWER CASE')">ORDER</button>
+          <img src="lumbartd/ZLMB-LCV.png" alt="ZLMB-LCV" class="spare-img small-image">
+          <span class="spare-text">ZLMB.LCV - LOWER CASE</span>
+          <img src="lumbartd/ZLMB-LCV.png" alt="ZLMB-LCV" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZLMB.MTR - MOTOR')">ORDER</button>
+          <img src="lumbartd/ZLMB-MTR.png" alt="ZLMB-MTR" class="spare-img small-image">
+          <span class="spare-text">ZLMB.MTR - MOTOR</span>
+          <img src="lumbartd/ZLMB-MTR.png" alt="ZLMB-MTR" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZLMB.PPSV - PRESSURE PLATE FOR SOLENOID VALVE')">ORDER</button>
+          <img src="lumbartd/ZLMB-PPSV.png" alt="ZLMB-PPSV" class="spare-img small-image">
+          <span class="spare-text">ZLMB.PPSV - PRESSURE PLATE FOR SOLENOID VALVE</span>
+          <img src="lumbartd/ZLMB-PPSV.png" alt="ZLMB-PPSV" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZLMB.GB - GIFT BOX LUMBAR')">ORDER</button>
+          <img src="lumbartd/ZLMB-GB.png" alt="ZLMB-GB" class="spare-img small-image">
+          <span class="spare-text">ZLMB.GB - GIFT BOX LUMBAR</span>
+          <img src="lumbartd/ZLMB-GB.png" alt="ZLMB-GB" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('HANDLELUMBAR - HANDLE DUS LUMBAR')">ORDER</button>
+          <img src="lumbartd/HANDLELUMBAR.png" alt="HANDLELUMBAR" class="spare-img small-image">
+          <span class="spare-text">HANDLELUMBAR - HANDLE DUS LUMBAR</span>
+          <img src="lumbartd/HANDLELUMBAR.png" alt="HANDLELUMBAR" class="large-image">
+        </li>
+    </ul>
+
+    <div class="category" onclick="toggleSpareparts(2)">
+        <img src="jh.png" alt="DR LASER EVO">
+        DR QYU LUMBAR PREMIUM
+        <span class="arrow">▶</span>
+    </div>
+    <ul class="spareparts">
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZLPR.LCOV - LOWER CASE LUMBAR PREMIUM')">ORDER</button>
+          <img src="lumbarprem/ZLPR-LCOV.png" alt="ZLPR-LCOV" class="spare-img small-image">
+          <span class="spare-text">ZLPR.LCOV - LOWER CASE LUMBAR PREMIUM</span>
+          <img src="lumbarprem/ZLPR-LCOV.png" alt="ZLPR-LCOV" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZLPR.ABT - AIRBAG TRAY LUMBAR PREMIUM')">ORDER</button>
+          <img src="lumbarprem/ZLPR-ABT.png" alt="ZLPR-ABT" class="spare-img small-image">
+          <span class="spare-text">ZLPR.ABT - AIRBAG TRAY LUMBAR PREMIUM</span>
+          <img src="lumbarprem/ZLPR-ABT.png" alt="ZLPR-ABT" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZLPR.BLC - BLACK OUT CASE LUMBAR PREMIUM')">ORDER</button>
+          <img src="lumbarprem/ZLPR-BLC.png" alt="ZLPR-BLC" class="spare-img small-image">
+          <span class="spare-text">ZLPR.BLC - BLACK OUT CASE LUMBAR PREMIUM</span>
+          <img src="lumbarprem/ZLPR-BLC.png" alt="ZLPR-BLC" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZLPR.UCOV - UPPER CASE LUMBAR PREMIUM')">ORDER</button>
+          <img src="lumbarprem/ZLPR-UCOV.png" alt="ZLPR-UCOV" class="spare-img small-image">
+          <span class="spare-text">ZLPR.UCOV - UPPER CASE LUMBAR PREMIUM</span>
+          <img src="lumbarprem/ZLPR-UCOV.png" alt="ZLPR-UCOV" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZLPR.CC10P - CONTROL CABLE 10 PIN LUMBAR PREMIUM')">ORDER</button>
+          <img src="lumbarprem/ZLPR-CC10P.png" alt="ZLPR-CC10P" class="spare-img small-image">
+          <span class="spare-text">ZLPR.CC10P - CONTROL CABLE 10 PIN LUMBAR PREMIUM</span>
+          <img src="lumbarprem/ZLPR-CC10P.png" alt="ZLPR-CC10P" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZLPR.CTRL - CONTROL PCB LUMBAR PREMIUM')">ORDER</button>
+          <img src="lumbarprem/ZLPR-CTRL.png" alt="ZLPR-CTRL" class="spare-img small-image">
+          <span class="spare-text">ZLPR.CTRL - CONTROL PCB LUMBAR PREMIUM</span>
+          <img src="lumbarprem/ZLPR-CTRL.png" alt="ZLPR-CTRL" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZLPR.DC12 - DC 12V CONNECTOR LUMBAR PREMIUM')">ORDER</button>
+          <img src="lumbarprem/ZLPR-DC12.png" alt="ZLPR-DC12" class="spare-img small-image">
+          <span class="spare-text">ZLPR.DC12 - DC 12V CONNECTOR LUMBAR PREMIUM</span>
+          <img src="lumbarprem/ZLPR-DC12.png" alt="ZLPR-DC12" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZLPR.EMS - EMS PADS LUMBAR PREMIUM')">ORDER</button>
+          <img src="lumbarprem/ZLPR-EMS.png" alt="ZLPR-EMS" class="spare-img small-image">
+          <span class="spare-text">ZLPR.EMS - EMS PADS LUMBAR PREMIUM</span>
+          <img src="lumbarprem/ZLPR-EMS.png" alt="ZLPR-EMS" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZLPR.HEAT - HEATER LUMBAR PREMIUM')">ORDER</button>
+          <img src="lumbarprem/ZLPR-HEAT.png" alt="ZLPR-HEAT" class="spare-img small-image">
+          <span class="spare-text">ZLPR.HEAT - HEATER LUMBAR PREMIUM</span>
+          <img src="lumbarprem/ZLPR-HEAT.png" alt="ZLPR-HEAT" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZLPR.LCD - LCD SCREEN LUMBAR PREMIUM')">ORDER</button>
+          <img src="lumbarprem/ZLPR-LCD.png" alt="ZLPR-LCD" class="spare-img small-image">
+          <span class="spare-text">ZLPR.LCD - LCD SCREEN LUMBAR PREMIUM</span>
+          <img src="lumbarprem/ZLPR-LCD.png" alt="ZLPR-LCD" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZLPR.MCU - MAIN PCB LUMBAR PREMIUM')">ORDER</button>
+          <img src="lumbarprem/ZLPR-MCU.png" alt="ZLPR-MCU" class="spare-img small-image">
+          <span class="spare-text">ZLPR.MCU - MAIN PCB LUMBAR PREMIUM</span>
+          <img src="lumbarprem/ZLPR-MCU.png" alt="ZLPR-MCU" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZLPR.MVB - MOTOR VIBRATION LUMBAR PREMIUM')">ORDER</button>
+          <img src="lumbarprem/ZLPR-MVB.png" alt="ZLPR-MVB" class="spare-img small-image">
+          <span class="spare-text">ZLPR.MVB - MOTOR VIBRATION LUMBAR PREMIUM</span>
+          <img src="lumbarprem/ZLPR-MVB.png" alt="ZLPR-MVB" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZLPR.PUMP - AIR PUMP LUMBAR PREMIUM')">ORDER</button>
+          <img src="lumbarprem/ZLPR-PUMP.png" alt="ZLPR-PUMP" class="spare-img small-image">
+          <span class="spare-text">ZLPR.PUMP - AIR PUMP LUMBAR PREMIUM</span>
+          <img src="lumbarprem/ZLPR-PUMP.png" alt="ZLPR-PUMP" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZLPR.TGC - TOP GOLD CASE LUMBAR PREMIUM')">ORDER</button>
+          <img src="lumbarprem/ZLPR-TGC.png" alt="ZLPR-TGC" class="spare-img small-image">
+          <span class="spare-text">ZLPR.TGC - TOP GOLD CASE LUMBAR PREMIUM</span>
+          <img src="lumbarprem/ZLPR-TGC.png" alt="ZLPR-TGC" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZLPR.L2A - ADAPTOR SET 2A LUMBAR PREMIUM')">ORDER</button>
+          <img src="lumbarprem/ZLPR-L2A.png" alt="ZLPR-L2A" class="spare-img small-image">
+          <span class="spare-text">ZLPR.L2A - ADAPTOR SET 2A LUMBAR PREMIUM</span>
+          <img src="lumbarprem/ZLPR-L2A.png" alt="ZLPR-L2A" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZLPR.CLOW - CONTROL LOWER CASE LUMBAR PREMIUM')">ORDER</button>
+          <img src="lumbarprem/ZLPR-CLOW.png" alt="ZLPR-CLOW" class="spare-img small-image">
+          <span class="spare-text">ZLPR.CLOW - CONTROL LOWER CASE LUMBAR PREMIUM</span>
+          <img src="lumbarprem/ZLPR-CLOW.png" alt="ZLPR-CLOW" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZLPR.CUP - CONTROL UPPER LUMBAR PREMIUM')">ORDER</button>
+          <img src="lumbarprem/ZLPR-CUP.png" alt="ZLPR-CUP" class="spare-img small-image">
+          <span class="spare-text">ZLPR.CUP - CONTROL UPPER LUMBAR PREMIUM</span>
+          <img src="lumbarprem/ZLPR-CUP.png" alt="ZLPR-CUP" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZLPR.BOLT - BOLT LUMBAR PREMIUM')">ORDER</button>
+          <img src="lumbarprem/ZLPR-BOLT.png" alt="ZLPR-BOLT" class="spare-img small-image">
+          <span class="spare-text">ZLPR.BOLT - BOLT LUMBAR PREMIUM</span>
+          <img src="lumbarprem/ZLPR-BOLT.png" alt="ZLPR-BOLT" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZLPR.GBX - GIFT BOX LUMBAR PREMIUM')">ORDER</button>
+          <img src="lumbarprem/ZLPR-GBX.png" alt="ZLPR-GBX" class="spare-img small-image">
+          <span class="spare-text">ZLPR.GBX - GIFT BOX LUMBAR PREMIUM</span>
+          <img src="lumbarprem/ZLPR-GBX.png" alt="ZLPR-GBX" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZLPR.NTC - NTC LUMBAR PREMIUM')">ORDER</button>
+          <img src="lumbarprem/ZLPR-NTC.png" alt="ZLPR-NTC" class="spare-img small-image">
+          <span class="spare-text">ZLPR.NTC - NTC LUMBAR PREMIUM</span>
+          <img src="lumbarprem/ZLPR-NTC.png" alt="ZLPR-NTC" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZLPR.SLED - STICKY LED LUMBAR PREMIUM')">ORDER</button>
+          <img src="lumbarprem/ZLPR-SLED.png" alt="ZLPR-SLED" class="spare-img small-image">
+          <span class="spare-text">ZLPR.SLED - STICKY LED LUMBAR PREMIUM</span>
+          <img src="lumbarprem/ZLPR-SLED.png" alt="ZLPR-SLED" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZLPR.TCC - TRANSPARENT COVER CONTROL LUMBAR PREMIUM')">ORDER</button>
+          <img src="lumbarprem/ZLPR-TCC.png" alt="ZLPR-TCC" class="spare-img small-image">
+          <span class="spare-text">ZLPR.TCC - TRANSPARENT COVER CONTROL LUMBAR PREMIUM</span>
+          <img src="lumbarprem/ZLPR-TCC.png" alt="ZLPR-TCC" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('HANDLELUMBAR - HANDLE DUS LUMBAR')">ORDER</button>
+          <img src="lumbarprem/HANDLELUMBAR.png" alt="HANDLELUMBAR" class="spare-img small-image">
+          <span class="spare-text">HANDLELUMBAR - HANDLE DUS LUMBAR</span>
+          <img src="lumbarprem/HANDLELUMBAR.png" alt="HANDLELUMBAR" class="large-image">
+        </li>
+    </ul>
+        
+    <div class="category" onclick="toggleSpareparts(3)">
+        <img src="evo.png" alt="DR LASER EVO">
+        DR LASER EVO
+        <span class="arrow">▶</span>
+    </div>
+    <ul class="spareparts">
+      <li onclick="showImage(this)">
+        <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZALC.830IR - INFRARED 830Nm LIIt LED')">ORDER</button>
+        <img src="evo/ZALC-830IR.png" alt="ZALC.830IR" class="spare-img small-image">
+        <span class="spare-text">ZALC.830IR - INFRARED 830Nm LIIt LED</span>
+        <img src="evo/ZALC-830IR.png" alt="ZALC.830IR" class="large-image">
+      </li>
+    
+      <li onclick="showImage(this)">
+        <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZALC.A - ADAPTOR CHARGING')">ORDER</button>
+        <img src="evo/ZALC-A.png" alt="ZALC.A" class="spare-img small-image">
+        <span class="spare-text">ZALC.A - ADAPTOR CHARGING</span>
+        <img src="evo/ZALC-A.png" alt="ZALC.A" class="large-image">
+      </li>
+    
+      <li onclick="showImage(this)">
+        <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZALC.BATCRC - BATTERY COVER OF REMOTE CONTROL')">ORDER</button>
+        <img src="evo/ZALC-BATCRC.png" alt="ZALC.BATCRC" class="spare-img small-image">
+        <span class="spare-text">ZALC.BATCRC - BATTERY COVER OF REMOTE CONTROL</span>
+        <img src="evo/ZALC-BATCRC.png" alt="ZALC.BATCRC" class="large-image">
+      </li>
+    
+      <li onclick="showImage(this)">
+        <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZALC.BC - BACK CASE')">ORDER</button>
+        <img src="evo/ZALC-BC.png" alt="ZALC.BC" class="spare-img small-image">
+        <span class="spare-text">ZALC.BC - BACK CASE</span>
+        <img src="evo/ZALC-BC.png" alt="ZALC.BC" class="large-image">
+      </li>
+    
+      <li onclick="showImage(this)">
+        <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZALC.BCPRC - BATTERY CONNECTING PLATE SET OF REMOTE CONTROL')">ORDER</button>
+        <img src="evo/ZALC-BCPRC.png" alt="ZALC.BCPRC" class="spare-img small-image">
+        <span class="spare-text">ZALC.BCPRC - BATTERY CONNECTING PLATE SET OF REMOTE CONTROL</span>
+        <img src="evo/ZALC-BCPRC.png" alt="ZALC.BCPRC" class="large-image">
+      </li>
+    
+      <li onclick="showImage(this)">
+        <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZALC.BCRC - BACK CASE OF REMOTE CONTROL')">ORDER</button>
+        <img src="evo/ZALC-BCRC.png" alt="ZALC.BCRC" class="spare-img small-image">
+        <span class="spare-text">ZALC.BCRC - BACK CASE OF REMOTE CONTROL</span>
+        <img src="evo/ZALC-BCRC.png" alt="ZALC.BCRC" class="large-image">
+      </li>
+    
+      <li onclick="showImage(this)">
+        <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZALC.BGL - BLUE GENERATING LASER')">ORDER</button>
+        <img src="evo/ZALC-BGL.png" alt="ZALC.BGL" class="spare-img small-image">
+        <span class="spare-text">ZALC.BGL - BLUE GENERATING LASER</span>
+        <img src="evo/ZALC-BGL.png" alt="ZALC.BGL" class="large-image">
+      </li>
+    
+      <li onclick="showImage(this)">
+        <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZALC.BRRC - BUTTON RUBBER OF REMOTE CONTROL')">ORDER</button>
+        <img src="evo/ZALC-BRRC.png" alt="ZALC.BRRC" class="spare-img small-image">
+        <span class="spare-text">ZALC.BRRC - BUTTON RUBBER OF REMOTE CONTROL</span>
+        <img src="evo/ZALC-BRRC.png" alt="ZALC.BRRC" class="large-image">
+      </li>
+    
+      <li onclick="showImage(this)">
+        <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZALC.BZ - BUZZER')">ORDER</button>
+        <img src="evo/ZALC-BZ.png" alt="ZALC.BZ" class="spare-img small-image">
+        <span class="spare-text">ZALC.BZ - BUZZER</span>
+        <img src="evo/ZALC-BZ.png" alt="ZALC.BZ" class="large-image">
+      </li>
+    
+      <li onclick="showImage(this)">
+        <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZALC.CIC - CHARGING IC DT7115')">ORDER</button>
+        <img src="evo/ZALC-CIC.png" alt="ZALC.CIC" class="spare-img small-image">
+        <span class="spare-text">ZALC.CIC - CHARGING IC DT7115</span>
+        <img src="evo/ZALC-CIC.png" alt="ZALC.CIC" class="large-image">
+      </li>
+    
+      <li onclick="showImage(this)">
+        <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZALC.FC - FRONT CASE')">ORDER</button>
+        <img src="evo/ZALC-FC.png" alt="ZALC.FC" class="spare-img small-image">
+        <span class="spare-text">ZALC.FC - FRONT CASE</span>
+        <img src="evo/ZALC-FC.png" alt="ZALC.FC" class="large-image">
+      </li>
+    
+      <li onclick="showImage(this)">
+        <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZALC.FCRC - FRONT CASE OF REMOTE')">ORDER</button>
+        <img src="evo/ZALC-FCRC.png" alt="ZALC.FCRC" class="spare-img small-image">
+        <span class="spare-text">ZALC.FCRC - FRONT CASE OF REMOTE</span>
+        <img src="evo/ZALC-FCRC.png" alt="ZALC.FCRC" class="large-image">
+      </li>
+    
+      <li onclick="showImage(this)">
+        <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZALC.FSC - FRONT STICKER COVER')">ORDER</button>
+        <img src="evo/ZALC-FSC.png" alt="ZALC.FSC" class="spare-img small-image">
+        <span class="spare-text">ZALC.FSC - FRONT STICKER COVER</span>
+        <img src="evo/ZALC-FSC.png" alt="ZALC.FSC" class="large-image">
+      </li>
+    
+      <li onclick="showImage(this)">
+        <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZALC.FSCRC - FRONT STICKER COVER FOR REMOTE CONTROL')">ORDER</button>
+        <img src="evo/ZALC-FSCRC.png" alt="ZALC.FSCRC" class="spare-img small-image">
+        <span class="spare-text">ZALC.FSCRC - FRONT STICKER COVER FOR REMOTE CONTROL</span>
+        <img src="evo/ZALC-FSCRC.png" alt="ZALC.FSCRC" class="large-image">
+      </li>
+    
+      <li onclick="showImage(this)">
+        <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZALC.ICA2UC - SOT IC A2UC')">ORDER</button>
+        <img src="evo/ZALC-ICA2UC.png" alt="ZALC.ICA2UC" class="spare-img small-image">
+        <span class="spare-text">ZALC.ICA2UC - SOT IC A2UC</span>
+        <img src="evo/ZALC-ICA2UC.png" alt="ZALC.ICA2UC" class="large-image">
+      </li>
+    
+      <li onclick="showImage(this)">
+        <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZALC.LB - LITHIUM BATTERY 2000 mAH')">ORDER</button>
+        <img src="evo/ZALC-LB.png" alt="ZALC.LB" class="spare-img small-image">
+        <span class="spare-text">ZALC.LB - LITHIUM BATTERY 2000 mAH</span>
+        <img src="evo/ZALC-LB.png" alt="ZALC.LB" class="large-image">
+      </li>
+        
+      <li onclick="showImage(this)">
+        <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZALC.LCDRC - LCD FOR REMOTE CONTROL')">ORDER</button>
+        <img src="evo/ZALC-LCDRC.png" alt="ZALC.LCDRC" class="spare-img small-image">
+        <span class="spare-text">ZALC.LCDRC - LCD FOR REMOTE CONTROL</span>
+        <img src="evo/ZALC-LCDRC.png" alt="ZALC.LCDRC" class="large-image">
+      </li>
+    
+      <li onclick="showImage(this)">
+        <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZALC.LH - LASER HEATSINK')">ORDER</button>
+        <img src="evo/ZALC-LH.png" alt="ZALC.LH" class="spare-img small-image">
+        <span class="spare-text">ZALC.LH - LASER HEATSINK</span>
+        <img src="evo/ZALC-LH.png" alt="ZALC.LH" class="large-image">
+      </li>
+    
+      <li onclick="showImage(this)">
+        <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZALC.MIC - MAIN IC STC451')">ORDER</button>
+        <img src="evo/ZALC-MIC.png" alt="ZALC.MIC" class="spare-img small-image">
+        <span class="spare-text">ZALC.MIC - MAIN IC STC451</span>
+        <img src="evo/ZALC-MIC.png" alt="ZALC.MIC" class="large-image">
+      </li>
+    
+      <li onclick="showImage(this)">
+        <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZALC.NMES - NMES FEMALE SOCKET')">ORDER</button>
+        <img src="evo/ZALC-NMES.png" alt="ZALC.NMES" class="spare-img small-image">
+        <span class="spare-text">ZALC.NMES - NMES FEMALE SOCKET</span>
+        <img src="evo/ZALC-NMES.png" alt="ZALC.NMES" class="large-image">
+      </li>
+    
+      <li onclick="showImage(this)">
+        <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZALC.PI - SMD POWER INDUCTOR 222')">ORDER</button>
+        <img src="evo/ZALC-PI.png" alt="ZALC.PI" class="spare-img small-image">
+        <span class="spare-text">ZALC.PI - SMD POWER INDUCTOR 222</span>
+        <img src="evo/ZALC-PI.png" alt="ZALC.PI" class="large-image">
+      </li>
+    
+      <li onclick="showImage(this)">
+        <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZALC.RC - REMOTE CONTROL')">ORDER</button>
+        <img src="evo/ZALC-RC.png" alt="ZALC.RC" class="spare-img small-image">
+        <span class="spare-text">ZALC.RC - REMOTE CONTROL</span>
+        <img src="evo/ZALC-RC.png" alt="ZALC.RC" class="large-image">
+      </li>
+    
+      <li onclick="showImage(this)">
+        <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZALC.RGL - RED GENERATING LASER')">ORDER</button>
+        <img src="evo/ZALC-RGL.png" alt="ZALC.RGL" class="spare-img small-image">
+        <span class="spare-text">ZALC.RGL - RED GENERATING LASER</span>
+        <img src="evo/ZALC-RGL.png" alt="ZALC.RGL" class="large-image">
+      </li>
+    
+      <li onclick="showImage(this)">
+        <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZALC.SMDC - SMD CAPACITOR')">ORDER</button>
+        <img src="evo/ZALC-SMDC.png" alt="ZALC.SMDC" class="spare-img small-image">
+        <span class="spare-text">ZALC.SMDC - SMD CAPACITOR</span>
+        <img src="evo/ZALC-SMDC.png" alt="ZALC.SMDC" class="large-image">
+      </li>
+    
+      <li onclick="showImage(this)">
+        <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZALC.SMDDT4 - DIODE T4')">ORDER</button>
+        <img src="evo/ZALC-SMDDT4.png" alt="ZALC.SMDDT4" class="spare-img small-image">
+        <span class="spare-text">ZALC.SMDDT4 - DIODE T4</span>
+        <img src="evo/ZALC-SMDDT4.png" alt="ZALC.SMDDT4" class="large-image">
+      </li>
+    
+      <li onclick="showImage(this)">
+        <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZALC.SMDP - SMD PUSH BUTTON')">ORDER</button>
+        <img src="evo/ZALC-SMDP.png" alt="ZALC.SMDP" class="spare-img small-image">
+        <span class="spare-text">ZALC.SMDP - SMD PUSH BUTTON</span>
+        <img src="evo/ZALC-SMDP.png" alt="ZALC.SMDP" class="large-image">
+      </li>
+    
+      <li onclick="showImage(this)">
+        <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZALC.SMDTY1 - SMD TRANSISTOR Y1')">ORDER</button>
+        <img src="evo/ZALC-SMDTY1.png" alt="ZALC.SMDTY1" class="spare-img small-image">
+        <span class="spare-text">ZALC.SMDTY1 - SMD TRANSISTOR Y1</span>
+        <img src="evo/ZALC-SMDTY1.png" alt="ZALC.SMDTY1" class="large-image">
+      </li>
+    
+      <li onclick="showImage(this)">
+        <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZALC.SMDTY2 - SMD TRANSISTOR Y2')">ORDER</button>
+        <img src="evo/ZALC-SMDTY2.png" alt="ZALC.SMDTY2" class="spare-img small-image">
+        <span class="spare-text">ZALC.SMDTY2 - SMD TRANSISTOR Y2</span>
+        <img src="evo/ZALC-SMDTY2.png" alt="ZALC.SMDTY2" class="large-image">
+      </li>
+    
+      <li onclick="showImage(this)">
+        <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZALC.TCS - TYPE C FEMALE SOCKET')">ORDER</button>
+        <img src="evo/ZALC-TCS.png" alt="ZALC.TCS" class="spare-img small-image">
+        <span class="spare-text">ZALC.TCS - TYPE C FEMALE SOCKET</span>
+        <img src="evo/ZALC-TCS.png" alt="ZALC.TCS" class="large-image">
+      </li>
+    
+      <li onclick="showImage(this)">
+        <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZALC.USBC - USB TYPE C CABLE')">ORDER</button>
+        <img src="evo/ZALC-USBC.png" alt="ZALC.USBC" class="spare-img small-image">
+        <span class="spare-text">ZALC.USBC - USB TYPE C CABLE</span>
+        <img src="evo/ZALC-USBC.png" alt="ZALC.USBC" class="large-image">
+      </li>   
+</ul>
+
+
+    <div class="category" onclick="toggleSpareparts(4)">
+        <img src="hiplus.png" alt="DR LASER EVO">
+        DR LASER HI PLUS
+        <span class="arrow">▶</span>
+    </div>
+    <ul class="spareparts">
+      <li onclick="showImage(this)">
+        <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZDR.CCI - CONNECTOR CHARGER INTRANASAL')">ORDER</button>
+        <img src="drlaser/ZDR-CCI.png" alt="ZDR.CCI" class="spare-img small-image">
+        <span class="spare-text">ZDR.CCI - CONNECTOR CHARGER INTRANASAL</span>
+        <img src="drlaser/ZDR-CCI.png" alt="ZDR.CCI" class="large-image">
+      </li>
+    
+      <li onclick="showImage(this)">
+        <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZDR.IGL - INVISIBLE GENERATING LASER')">ORDER</button>
+        <img src="drlaser/ZDR-IGL.png" alt="ZDR.IGL" class="spare-img small-image">
+        <span class="spare-text">ZDR.IGL - INVISIBLE GENERATING LASER</span>
+        <img src="drlaser/ZDR-IGL.png" alt="ZDR.IGL" class="large-image">
+      </li>
+    
+      <li onclick="showImage(this)">
+        <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZDR.SLP10 - SLONGSONG KARET INTRANASAL PERFECT 10')">ORDER</button>
+        <img src="drlaser/ZDR-SLP10.png" alt="ZDR.SLP10" class="spare-img small-image">
+        <span class="spare-text">ZDR.SLP10 - SLONGSONG KARET INTRANASAL PERFECT 10</span>
+        <img src="drlaser/ZDR-SLP10.png" alt="ZDR.SLP10" class="large-image">
+      </li>
+    
+      <li onclick="showImage(this)">
+        <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZDRHP.BC - BUTTON CASE FOR HI-PLUS')">ORDER</button>
+        <img src="drlaser/ZDRHP-BC.png" alt="ZDRHP.BC" class="spare-img small-image">
+        <span class="spare-text">ZDRHP.BC - BUTTON CASE FOR HI-PLUS</span>
+        <img src="drlaser/ZDRHP-BC.png" alt="ZDRHP.BC" class="large-image">
+      </li>
+    
+      <li onclick="showImage(this)">
+        <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZDRHP.CCMA - CHIP CENTER (MESIN UTAMA/MESIN A) DR LASER HI PLUS')">ORDER</button>
+        <img src="drlaser/ZDRHP-CCMA.png" alt="ZDRHP.CCMA" class="spare-img small-image">
+        <span class="spare-text">ZDRHP.CCMA - CHIP CENTER (MESIN UTAMA/MESIN A) DR LASER HI PLUS</span>
+        <img src="drlaser/ZDRHP-CCMA.png" alt="ZDRHP.CCMA" class="large-image">
+      </li>
+    
+      <li onclick="showImage(this)">
+        <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZDRHP.CNEW - CHARGER + USB CABLE DR LASER HIPLUS NEW')">ORDER</button>
+        <img src="drlaser/ZDRHP-CNEW.png" alt="ZDRHP.CNEW" class="spare-img small-image">
+        <span class="spare-text">ZDRHP.CNEW - CHARGER + USB CABLE DR LASER HIPLUS NEW</span>
+        <img src="drlaser/ZDRHP-CNEW.png" alt="ZDRHP.CNEW" class="large-image">
+      </li>
+    
+      <li onclick="showImage(this)">
+        <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZDRHP.CUHP - CABLE USB DR LASER HI PLUS')">ORDER</button>
+        <img src="drlaser/ZDRHP-CUHP.png" alt="ZDRHP.CUHP" class="spare-img small-image">
+        <span class="spare-text">ZDRHP.CUHP - CABLE USB DR LASER HI PLUS</span>
+        <img src="drlaser/ZDRHP-CUHP.png" alt="ZDRHP.CUHP" class="large-image">
+      </li>
+    
+      <li onclick="showImage(this)">
+        <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZDRHP.GL - GENERATING LASER DR HI PLUS')">ORDER</button>
+        <img src="drlaser/ZDRHP-GL.png" alt="ZDRHP.GL" class="spare-img small-image">
+        <span class="spare-text">ZDRHP.GL - GENERATING LASER DR HI PLUS</span>
+        <img src="drlaser/ZDRHP-GL.png" alt="ZDRHP.GL" class="large-image">
+      </li>
+    
+      <li onclick="showImage(this)">
+        <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZDRHP.ICLM - IC LM393 for HIPLUS')">ORDER</button>
+        <img src="drlaser/ZDRHP-ICLM.png" alt="ZDRHP.ICLM" class="spare-img small-image">
+        <span class="spare-text">ZDRHP.ICLM - IC LM393 for HIPLUS</span>
+        <img src="drlaser/ZDRHP-ICLM.png" alt="ZDRHP.ICLM" class="large-image">
+      </li>
+    
+      <li onclick="showImage(this)">
+        <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZDRHP.IR - IC REGULATOR DR HI PLUS')">ORDER</button>
+        <img src="it.png" alt="ZDRHP.IR" class="spare-img small-image">
+        <span class="spare-text">ZDRHP.IR - IC REGULATOR DR HI PLUS</span>
+        <img src="it.png" alt="ZDRHP.IR" class="large-image">
+      </li>
+    
+      <li onclick="showImage(this)">
+        <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZDRHP.LB - LITHIUM BATTERY DR HI PLUS')">ORDER</button>
+        <img src="drlaser/ZDRHP-LB.png" alt="ZDRHP.LB" class="spare-img small-image">
+        <span class="spare-text">ZDRHP.LB - LITHIUM BATTERY DR HI PLUS</span>
+        <img src="drlaser/ZDRHP-LB.png" alt="ZDRHP.LB" class="large-image">
+      </li>
+    
+      <li onclick="showImage(this)">
+        <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZDRHP.LCD - LCD DR HI PLUS')">ORDER</button>
+        <img src="drlaser/ZDRHP-LCD.png" alt="ZDRHP.LCD" class="spare-img small-image">
+        <span class="spare-text">ZDRHP.LCD - LCD DR HI PLUS</span>
+        <img src="drlaser/ZDRHP-LCD.png" alt="ZDRHP.LCD" class="large-image">
+      </li>
+    
+      <li onclick="showImage(this)">
+        <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZDRHP.LPCB - LASER BOARD FOR HI-PLUS')">ORDER</button>
+        <img src="drlaser/ZDRHP-LPCB.png" alt="ZDRHP.LPCB" class="spare-img small-image">
+        <span class="spare-text">ZDRHP.LPCB - LASER BOARD FOR HI-PLUS</span>
+        <img src="drlaser/ZDRHP-LPCB.png" alt="ZDRHP.LPCB" class="large-image">
+      </li>
+    
+      <li onclick="showImage(this)">
+        <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZDRHP.R - RESISTANCE HI PLUS')">ORDER</button>
+        <img src="drlaser/ZDRHP-R.png" alt="ZDRHP.R" class="spare-img small-image">
+        <span class="spare-text">ZDRHP.R - RESISTANCE HI PLUS</span>
+        <img src="drlaser/ZDRHP-R.png" alt="ZDRHP.R" class="large-image">
+      </li>
+    
+      <li onclick="showImage(this)">
+        <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZDRHP.SCHP - SOCKET CHARGER DR LASER HI PLUS')">ORDER</button>
+        <img src="drlaser/ZDRHP-SCHP.png" alt="ZDRHP.SCHP" class="spare-img small-image">
+        <span class="spare-text">ZDRHP.SCHP - SOCKET CHARGER DR LASER HI PLUS</span>
+        <img src="drlaser/ZDRHP-SCHP.png" alt="ZDRHP.SCHP" class="large-image">
+      </li>
+    
+      <li onclick="showImage(this)">
+        <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZDRHP.SLS - STICKY LED SCREEN (for HIPLUS)')">ORDER</button>
+        <img src="drlaser/ZDRHP-SLS.png" alt="ZDRHP.SLS" class="spare-img small-image">
+        <span class="spare-text">ZDRHP.SLS - STICKY LED SCREEN (for HIPLUS)</span>
+        <img src="drlaser/ZDRHP-SLS.png" alt="ZDRHP.SLS" class="large-image">
+      </li>
+    
+      <li onclick="showImage(this)">
+        <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZDRHP.TDLS - TRANSPARANT LENS OF DISPLAY SCREEN OF HI-PLUS')">ORDER</button>
+        <img src="drlaser/ZDRHP-TDLS.png" alt="ZDRHP.TDLS" class="spare-img small-image">
+        <span class="spare-text">ZDRHP.TDLS - TRANSPARANT LENS OF DISPLAY SCREEN OF HI-PLUS</span>
+        <img src="drlaser/ZDRHP-TDLS.png" alt="ZDRHP.TDLS" class="large-image">
+      </li>
+    
+      <li onclick="showImage(this)">
+        <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZDRHP.TN - THE NEEDLE DR HI PLUS')">ORDER</button>
+        <img src="drlaser/ZDRHP-TN.png" alt="ZDRHP.TN" class="spare-img small-image">
+        <span class="spare-text">ZDRHP.TN - THE NEEDLE DR HI PLUS</span>
+        <img src="drlaser/ZDRHP-TN.png" alt="ZDRHP.TN" class="large-image">
+      </li>
+    
+      <li onclick="showImage(this)">
+        <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZDRHP.TRQ1 - TRANSISTOR Q1 LASER for HIPLUS')">ORDER</button>
+        <img src="drlaser/ZDRHP-TRQ1.png" alt="ZDRHP.TRQ1" class="spare-img small-image">
+        <span class="spare-text">ZDRHP.TRQ1 - TRANSISTOR Q1 LASER for HIPLUS</span>
+        <img src="drlaser/ZDRHP-TRQ1.png" alt="ZDRHP.TRQ1" class="large-image">
+      </li>
+    
+      <li onclick="showImage(this)">
+        <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZDRHP.TRS - TRANSISTOR DR LASER HI PLUS')">ORDER</button>
+        <img src="drlaser/ZDRHP-TRS.png" alt="ZDRHP.TRS" class="spare-img small-image">
+        <span class="spare-text">ZDRHP.TRS - TRANSISTOR DR LASER HI PLUS</span>
+        <img src="drlaser/ZDRHP-TRS.png" alt="ZDRHP.TRS" class="large-image">
+      </li>
+    
+      <li onclick="showImage(this)">
+        <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZDRHP.WB - WATCHBAND DR HI PLUS')">ORDER</button>
+        <img src="drlaser/ZDRHP-WB.png" alt="ZDRHP.WB" class="spare-img small-image">
+        <span class="spare-text">ZDRHP.WB - WATCHBAND DR HI PLUS</span>
+        <img src="drlaser/ZDRHP-WB.png" alt="ZDRHP.WB" class="large-image">
+      </li>
+    
+      <li onclick="showImage(this)">
+        <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZDRHP.WC - WATCHCASE DR HI PLUS')">ORDER</button>
+        <img src="it.png" alt="ZDRHP.WC" class="spare-img small-image">
+        <span class="spare-text">ZDRHP.WC - WATCHCASE DR HI PLUS</span>
+        <img src="it.png" alt="ZDRHP.WC" class="large-image">
+      </li>
+    
+      <li onclick="showImage(this)">
+        <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZDRL.C47UF - ELEKTROLIT CONDENSATOR 47UF')">ORDER</button>
+        <img src="drlaser/ZDRL-C47UF.png" alt="ZDRL.C47UF" class="spare-img small-image">
+        <span class="spare-text">ZDRL.C47UF - ELEKTROLIT CONDENSATOR 47UF</span>
+        <img src="drlaser/ZDRL-C47UF.png" alt="ZDRL.C47UF" class="large-image">
+      </li>
+    
+      <li onclick="showImage(this)">
+        <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZDRP10+.GLB - GENERATING LASER PERFECT 10+ WARNA BLUE')">ORDER</button>
+        <img src="drlaser/ZDRP10+-GLB.png" alt="ZDRP10+.GLB" class="spare-img small-image">
+        <span class="spare-text">ZDRP10+.GLB - GENERATING LASER PERFECT 10+ WARNA BLUE</span>
+        <img src="drlaser/ZDRP10+-GLB.png" alt="ZDRP10+.GLB" class="large-image">
+      </li>
+    
+      <li onclick="showImage(this)">
+        <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZDRP10+.GLY - GENERATING LASER PERFECT 10+ WARNA YELLOW')">ORDER</button>
+        <img src="drlaser/ZDRP10+-GLY.png" alt="ZDRP10+.GLY" class="spare-img small-image">
+        <span class="spare-text">ZDRP10+.GLY - GENERATING LASER PERFECT 10+ WARNA YELLOW</span>
+        <img src="drlaser/ZDRP10+-GLY.png" alt="ZDRP10+.GLY" class="large-image">
+      </li>
+    
+      <li onclick="showImage(this)">
+        <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZDRU.BLT - BOLT (for HIPLUS, PF10, PF10+)')">ORDER</button>
+        <img src="drlaser/ZDRU-BLT.png" alt="ZDRU.BLT" class="spare-img small-image">
+        <span class="spare-text">ZDRU.BLT - BOLT (for HIPLUS, PF10, PF10+)</span>
+        <img src="drlaser/ZDRU-BLT.png" alt="ZDRU.BLT" class="large-image">
+      </li>
+    
+      <li onclick="showImage(this)">
+        <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZDRU.CAP - SMD CAPACITOR')">ORDER</button>
+        <img src="drlaser/ZDRU-CAP.png" alt="ZDRU.CAP" class="spare-img small-image">
+        <span class="spare-text">ZDRU.CAP - SMD CAPACITOR</span>
+        <img src="drlaser/ZDRU-CAP.png" alt="ZDRU.CAP" class="large-image">
+      </li>
+    
+      <li onclick="showImage(this)">
+        <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZDRU.CIW - CABLE INTRANASAL WHITE')">ORDER</button>
+        <img src="drlaser/ZDRU-CIW.png" alt="ZDRU.CIW" class="spare-img small-image">
+        <span class="spare-text">ZDRU.CIW - CABLE INTRANASAL WHITE</span>
+        <img src="drlaser/ZDRU-CIW.png" alt="ZDRU.CIW" class="large-image">
+      </li>
+    
+      <li onclick="showImage(this)">
+        <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZDRU.PBS - PUSH BUTTON SMD (for HIPLUS,PF10,PF10+)')">ORDER</button>
+        <img src="drlaser/ZDRU-PBS.png" alt="ZDRU.PBS" class="spare-img small-image">
+        <span class="spare-text">ZDRU.PBS - PUSH BUTTON SMD (for HIPLUS,PF10,PF10+)</span>
+        <img src="drlaser/ZDRU-PBS.png" alt="ZDRU.PBS" class="large-image">
+      </li>
+    
+      <li onclick="showImage(this)">
+        <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZDRU.TL1H - TRANSPARENT LENS 1 HOLES')">ORDER</button>
+        <img src="drlaser/ZDRU-TL1H.png" alt="ZDRU.TL1H" class="spare-img small-image">
+        <span class="spare-text">ZDRU.TL1H - TRANSPARENT LENS 1 HOLES</span>
+        <img src="drlaser/ZDRU-TL1H.png" alt="ZDRU.TL1H" class="large-image">
+      </li>
+    
+      <li onclick="showImage(this)">
+        <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZDRU.TL2H - TRANSPARENT LENS 2 HOLES')">ORDER</button>
+        <img src="drlaser/ZDRU-TL2H.png" alt="ZDRU.TL2H" class="spare-img small-image">
+        <span class="spare-text">ZDRU.TL2H - TRANSPARENT LENS 2 HOLES</span>
+        <img src="drlaser/ZDRU-TL2H.png" alt="ZDRU.TL2H" class="large-image">
+      </li>
+    
+      <li onclick="showImage(this)">
+        <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZDRU.TL4H - TRANSPARENT LENS 4 HOLES')">ORDER</button>
+        <img src="drlaser/ZDRU-TL4H.png" alt="ZDRU.TL4H" class="spare-img small-image">
+        <span class="spare-text">ZDRU.TL4H - TRANSPARENT LENS 4 HOLES</span>
+        <img src="drlaser/ZDRU-TL4H.png" alt="ZDRU.TL4H" class="large-image">
+      </li>
+
+    </ul>
+
+    <div class="category" onclick="toggleSpareparts(5)">
+        <img src="perfect10.png" alt="DR LASER EVO">
+        DR LASER PERFECT 10
+        <span class="arrow">▶</span>
+    </div>
+    <ul class="spareparts">
+        <li onclick="showImage(this)">
+        <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZDR.BTP10 - BUTTON DR LASER PERFECT 10')">ORDER</button>
+        <img src="drlaser/ZDR-BTP10.png" alt="ZDR.BTP10" class="spare-img small-image">
+        <span class="spare-text">ZDR.BTP10 - BUTTON DR LASER PERFECT 10</span>
+        <img src="drlaser/ZDR-BTP10.png" alt="ZDR.BTP10" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+        <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZDR.CCI - CONNECTOR CHARGER INTRANASAL')">ORDER</button>
+        <img src="drlaser/ZDR-CCI.png" alt="ZDR.CCI" class="spare-img small-image">
+        <span class="spare-text">ZDR.CCI - CONNECTOR CHARGER INTRANASAL</span>
+        <img src="drlaser/ZDR-CCI.png" alt="ZDR.CCI" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+        <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZDR.CCP10 - CHARGER CONNECTOR DR LASER PERFECT 10')">ORDER</button>
+        <img src="drlaser/ZDR-CCP10.png" alt="ZDR.CCP10" class="spare-img small-image">
+        <span class="spare-text">ZDR.CCP10 - CHARGER CONNECTOR DR LASER PERFECT 10</span>
+        <img src="drlaser/ZDR-CCP10.png" alt="ZDR.CCP10" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+        <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZDR.CUP10 - CABLE USB DR LASER PERFECT 10')">ORDER</button>
+        <img src="drlaser/ZDR-CUP10.png" alt="ZDR.CUP10" class="spare-img small-image">
+        <span class="spare-text">ZDR.CUP10 - CABLE USB DR LASER PERFECT 10</span>
+        <img src="drlaser/ZDR-CUP10.png" alt="ZDR.CUP10" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+        <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZDR.IGL - INVISIBLE GENERATING LASER')">ORDER</button>
+        <img src="drlaser/ZDR-IGL.png" alt="ZDR.IGL" class="spare-img small-image">
+        <span class="spare-text">ZDR.IGL - INVISIBLE GENERATING LASER</span>
+        <img src="drlaser/ZDR-IGL.png" alt="ZDR.IGL" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+        <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZDR.LCDP10 - LCD DR LASER PERFECT 10')">ORDER</button>
+        <img src="drlaser/ZDR-LCDP10.png" alt="ZDR.LCDP10" class="spare-img small-image">
+        <span class="spare-text">ZDR.LCDP10 - LCD DR LASER PERFECT 10</span>
+        <img src="drlaser/ZDR-LCDP10.png" alt="ZDR.LCDP10" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+        <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZDR.MBP10 - MAIN BOARD (MESIN UTAMA/MESIN A) DR LASER PERFECT 10')">ORDER</button>
+        <img src="drlaser/ZDR-MBP10.png" alt="ZDR.MBP10" class="spare-img small-image">
+        <span class="spare-text">ZDR.MBP10 - MAIN BOARD (MESIN UTAMA/MESIN A) DR LASER PERFECT 10</span>
+        <img src="drlaser/ZDR-MBP10.png" alt="ZDR.MBP10" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+        <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZDR.SCP10 - SOCKET CHARGER DR LASER PERFECT 10')">ORDER</button>
+        <img src="drlaser/ZDR-SCP10.png" alt="ZDR.SCP10" class="spare-img small-image">
+        <span class="spare-text">ZDR.SCP10 - SOCKET CHARGER DR LASER PERFECT 10</span>
+        <img src="drlaser/ZDR-SCP10.png" alt="ZDR.SCP10" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+        <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZDR.SLP10 - SLONGSONG KARET INTRANASAL PERFECT 10')">ORDER</button>
+        <img src="drlaser/ZDR-SLP10.png" alt="ZDR.SLP10" class="spare-img small-image">
+        <span class="spare-text">ZDR.SLP10 - SLONGSONG KARET INTRANASAL PERFECT 10</span>
+        <img src="drlaser/ZDR-SLP10.png" alt="ZDR.SLP10" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+        <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZDR.WBP10 - WATCHBAND DR LASER PERFECT 10')">ORDER</button>
+        <img src="drlaser/ZDR-WBP10.png" alt="ZDR.WBP10" class="spare-img small-image">
+        <span class="spare-text">ZDR.WBP10 - WATCHBAND DR LASER PERFECT 10</span>
+        <img src="drlaser/ZDR-WBP10.png" alt="ZDR.WBP10" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+        <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZDRL.C47UF - ELEKTROLIT CONDENSATOR 47UF')">ORDER</button>
+        <img src="drlaser/ZDRL-C47UF.png" alt="ZDRL.C47UF" class="spare-img small-image">
+        <span class="spare-text">ZDRL.C47UF - ELEKTROLIT CONDENSATOR 47UF</span>
+        <img src="drlaser/ZDRL-C47UF.png" alt="ZDRL.C47UF" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+        <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZDRP10+.GLB - GENERATING LASER PERFECT 10+ WARNA BLUE')">ORDER</button>
+        <img src="drlaser/ZDRP10+-GLB.png" alt="ZDRP10+.GLB" class="spare-img small-image">
+        <span class="spare-text">ZDRP10+.GLB - GENERATING LASER PERFECT 10+ WARNA BLUE</span>
+        <img src="drlaser/ZDRP10+-GLB.png" alt="ZDRP10+.GLB" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+        <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZDRP10+.GLY - GENERATING LASER PERFECT 10+ WARNA YELLOW')">ORDER</button>
+        <img src="drlaser/ZDRP10+-GLY.png" alt="ZDRP10+.GLY" class="spare-img small-image">
+        <span class="spare-text">ZDRP10+.GLY - GENERATING LASER PERFECT 10+ WARNA YELLOW</span>
+        <img src="drlaser/ZDRP10+-GLY.png" alt="ZDRP10+.GLY" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+        <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZDRU.BLT - BOLT (for HIPLUS, PF10, PF10+)')">ORDER</button>
+        <img src="drlaser/ZDRU-BLT.png" alt="ZDRU.BLT" class="spare-img small-image">
+        <span class="spare-text">ZDRU.BLT - BOLT (for HIPLUS, PF10, PF10+)</span>
+        <img src="drlaser/ZDRU-BLT.png" alt="ZDRU.BLT" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+        <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZDRU.CAP - SMD CAPACITOR')">ORDER</button>
+        <img src="drlaser/ZDRU-CAP.png" alt="ZDRU.CAP" class="spare-img small-image">
+        <span class="spare-text">ZDRU.CAP - SMD CAPACITOR</span>
+        <img src="drlaser/ZDRU-CAP.png" alt="ZDRU.CAP" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+        <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZDRU.CIW - CABLE INTRANASAL WHITE')">ORDER</button>
+        <img src="drlaser/ZDRU-CIW.png" alt="ZDRU.CIW" class="spare-img small-image">
+        <span class="spare-text">ZDRU.CIW - CABLE INTRANASAL WHITE</span>
+        <img src="drlaser/ZDRU-CIW.png" alt="ZDRU.CIW" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+        <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZDRU.PBS - PUSH BUTTON SMD (for HIPLUS,PF10,PF10+)')">ORDER</button>
+        <img src="drlaser/ZDRU-PBS.png" alt="ZDRU.PBS" class="spare-img small-image">
+        <span class="spare-text">ZDRU.PBS - PUSH BUTTON SMD (for HIPLUS,PF10,PF10+)</span>
+        <img src="drlaser/ZDRU-PBS.png" alt="ZDRU.PBS" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+        <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZDRU.TL1H - TRANSPARENT LENS 1 HOLES')">ORDER</button>
+        <img src="drlaser/ZDRU-TL1H.png" alt="ZDRU.TL1H" class="spare-img small-image">
+        <span class="spare-text">ZDRU.TL1H - TRANSPARENT LENS 1 HOLES</span>
+        <img src="drlaser/ZDRU-TL1H.png" alt="ZDRU.TL1H" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+        <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZDRU.TL2H - TRANSPARENT LENS 2 HOLES')">ORDER</button>
+        <img src="drlaser/ZDRU-TL2H.png" alt="ZDRU.TL2H" class="spare-img small-image">
+        <span class="spare-text">ZDRU.TL2H - TRANSPARENT LENS 2 HOLES</span>
+        <img src="drlaser/ZDRU-TL2H.png" alt="ZDRU.TL2H" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+        <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZDRU.TL4H - TRANSPARENT LENS 4 HOLES')">ORDER</button>
+        <img src="drlaser/ZDRU-TL4H.png" alt="ZDRU.TL4H" class="spare-img small-image">
+        <span class="spare-text">ZDRU.TL4H - TRANSPARENT LENS 4 HOLES</span>
+        <img src="drlaser/ZDRU-TL4H.png" alt="ZDRU.TL4H" class="large-image">
+        </li>
+    </ul>
+        
+    <div class="category" onclick="toggleSpareparts(6)">
+        <img src="perfect10.png" alt="DR LASER EVO">
+        DR LASER PERFECT 10 NEW
+        <span class="arrow">▶</span>
+    </div>
+    <ul class="spareparts">
+        <li onclick="showImage(this)">
+        <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZDR.BT - BUTTON DR LASER PERFECT 10 NEW')">ORDER</button>
+        <img src="drlaser/ZDR-BT.png" alt="ZDR.BT" class="spare-img small-image">
+        <span class="spare-text">ZDR.BT - BUTTON DR LASER PERFECT 10 NEW</span>
+        <img src="drlaser/ZDR-BT.png" alt="ZDR.BT" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+        <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZDR.CCI - CONNECTOR CHARGER INTRANASAL')">ORDER</button>
+        <img src="drlaser/ZDR-CCI.png" alt="ZDR.CCI" class="spare-img small-image">
+        <span class="spare-text">ZDR.CCI - CONNECTOR CHARGER INTRANASAL</span>
+        <img src="drlaser/ZDR-CCI.png" alt="ZDR.CCI" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+        <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZDR.CP10N - CHARGER DR LASER PERFECT 10 NEW')">ORDER</button>
+        <img src="drlaser/ZDR-CP10N.png" alt="ZDR.CP10N" class="spare-img small-image">
+        <span class="spare-text">ZDR.CP10N - CHARGER DR LASER PERFECT 10 NEW</span>
+        <img src="drlaser/ZDR-CP10N.png" alt="ZDR.CP10N" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+        <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZDR.ICP10N - IC REGULATOR DR LASER PERFECT 10 NEW')">ORDER</button>
+        <img src="drlaser/ZDR-ICP10N.png" alt="ZDR.ICP10N" class="spare-img small-image">
+        <span class="spare-text">ZDR.ICP10N - IC REGULATOR DR LASER PERFECT 10 NEW</span>
+        <img src="drlaser/ZDR-ICP10N.png" alt="ZDR.ICP10N" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+        <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZDR.IGL - INVISIBLE GENERATING LASER')">ORDER</button>
+        <img src="drlaser/ZDR-IGL.png" alt="ZDR.IGL" class="spare-img small-image">
+        <span class="spare-text">ZDR.IGL - INVISIBLE GENERATING LASER</span>
+        <img src="drlaser/ZDR-IGL.png" alt="ZDR.IGL" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+        <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZDR.LCDP10N - LCD DR LASER PERFECT 10 NEW')">ORDER</button>
+        <img src="drlaser/ZDR-LCDP10N.png" alt="ZDR.LCDP10N" class="spare-img small-image">
+        <span class="spare-text">ZDR.LCDP10N - LCD DR LASER PERFECT 10 NEW</span>
+        <img src="drlaser/ZDR-LCDP10N.png" alt="ZDR.LCDP10N" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+        <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZDR.MBP10 - MAIN BOARD (MESIN UTAMA/MESIN A) DR LASER PERFECT 10')">ORDER</button>
+        <img src="drlaser/ZDR-MBP10.png" alt="ZDR.MBP10" class="spare-img small-image">
+        <span class="spare-text">ZDR.MBP10 - MAIN BOARD (MESIN UTAMA/MESIN A) DR LASER PERFECT 10</span>
+        <img src="drlaser/ZDR-MBP10.png" alt="ZDR.MBP10" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+        <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZDR.SCP10N - SOCKET CHARGER DR LASER PERFECT 10 NEW')">ORDER</button>
+        <img src="drlaser/ZDR-SCP10N.png" alt="ZDR.SCP10N" class="spare-img small-image">
+        <span class="spare-text">ZDR.SCP10N - SOCKET CHARGER DR LASER PERFECT 10 NEW</span>
+        <img src="drlaser/ZDR-SCP10N.png" alt="ZDR.SCP10N" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+        <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZDR.SLP10 - SLONGSONG KARET INTRANASAL PERFECT 10')">ORDER</button>
+        <img src="drlaser/ZDR-SLP10.png" alt="ZDR.SLP10" class="spare-img small-image">
+        <span class="spare-text">ZDR.SLP10 - SLONGSONG KARET INTRANASAL PERFECT 10</span>
+        <img src="drlaser/ZDR-SLP10.png" alt="ZDR.SLP10" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+        <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZDRHP.TN - THE NEEDLE DR HI PLUS')">ORDER</button>
+        <img src="drlaser/ZDRHP-TN.png" alt="ZDRHP.TN" class="spare-img small-image">
+        <span class="spare-text">ZDRHP.TN - THE NEEDLE DR HI PLUS</span>
+        <img src="drlaser/ZDRHP-TN.png" alt="ZDRHP.TN" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+        <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZDR.WBP10N - WATCH BAND DR LASER PERFECT 10 NEW')">ORDER</button>
+        <img src="drlaser/ZDR-WBP10N.png" alt="ZDR.WBP10N" class="spare-img small-image">
+        <span class="spare-text">ZDR.WBP10N - WATCH BAND DR LASER PERFECT 10 NEW</span>
+        <img src="drlaser/ZDR-WBP10N.png" alt="ZDR.WBP10N" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+        <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZDRL.C47UF - ELEKTROLIT CONDENSATOR 47UF')">ORDER</button>
+        <img src="drlaser/ZDRL-C47UF.png" alt="ZDRL.C47UF" class="spare-img small-image">
+        <span class="spare-text">ZDRL.C47UF - ELEKTROLIT CONDENSATOR 47UF</span>
+        <img src="drlaser/ZDRL-C47UF.png" alt="ZDRL.C47UF" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+        <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZDRP10+.GLB - GENERATING LASER PERFECT 10+ WARNA BLUE')">ORDER</button>
+        <img src="drlaser/ZDRP10+-GLB.png" alt="ZDRP10+.GLB" class="spare-img small-image">
+        <span class="spare-text">ZDRP10+.GLB - GENERATING LASER PERFECT 10+ WARNA BLUE</span>
+        <img src="drlaser/ZDRP10+-GLB.png" alt="ZDRP10+.GLB" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+        <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZDRP10+.GLY - GENERATING LASER PERFECT 10+ WARNA YELLOW')">ORDER</button>
+        <img src="drlaser/ZDRP10+-GLY.png" alt="ZDRP10+.GLY" class="spare-img small-image">
+        <span class="spare-text">ZDRP10+.GLY - GENERATING LASER PERFECT 10+ WARNA YELLOW</span>
+        <img src="drlaser/ZDRP10+-GLY.png" alt="ZDRP10+.GLY" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+        <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZDRPN.LB - LITHIUM BATTERY DR LASER PERFECT 10 NEW')">ORDER</button>
+        <img src="drlaser/ZDRPN-LB.png" alt="ZDRPN.LB" class="spare-img small-image">
+        <span class="spare-text">ZDRPN.LB - LITHIUM BATTERY DR LASER PERFECT 10 NEW</span>
+        <img src="drlaser/ZDRPN-LB.png" alt="ZDRPN.LB" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+        <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZDRPN.LPCB - LASER BOARD FOR PERFECT 10')">ORDER</button>
+        <img src="drlaser/ZDRPN-LPCB.png" alt="ZDRPN.LPCB" class="spare-img small-image">
+        <span class="spare-text">ZDRPN.LPCB - LASER BOARD FOR PERFECT 10</span>
+        <img src="drlaser/ZDRPN-LPCB.png" alt="ZDRPN.LPCB" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+        <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZDRPN.SLB - STICKY LED FOR PERFECT 10')">ORDER</button>
+        <img src="drlaser/ZDRPN-SLB.png" alt="ZDRPN.SLB" class="spare-img small-image">
+        <span class="spare-text">ZDRPN.SLB - STICKY LED FOR PERFECT 10</span>
+        <img src="drlaser/ZDRPN-SLB.png" alt="ZDRPN.SLB" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+        <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZDRPN.TLDS - TRANSPARANT LENS OF DISPLAY SCREEN')">ORDER</button>
+        <img src="drlaser/ZDRPN-TLDS.png" alt="ZDRPN.TLDS" class="spare-img small-image">
+        <span class="spare-text">ZDRPN.TLDS - TRANSPARANT LENS OF DISPLAY SCREEN</span>
+        <img src="drlaser/ZDRPN-TLDS.png" alt="ZDRPN.TLDS" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+        <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZDRPN.WC - WATCHCASE FOR PERFECT 10')">ORDER</button>
+        <img src="drlaser/ZDRPN-WC.png" alt="ZDRPN.WC" class="spare-img small-image">
+        <span class="spare-text">ZDRPN.WC - WATCHCASE FOR PERFECT 10</span>
+        <img src="drlaser/ZDRPN-WC.png" alt="ZDRPN.WC" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+        <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZDRU.BLT - BOLT (for HIPLUS, PF10, PF10+)')">ORDER</button>
+        <img src="drlaser/ZDRU-BLT.png" alt="ZDRU.BLT" class="spare-img small-image">
+        <span class="spare-text">ZDRU.BLT - BOLT (for HIPLUS, PF10, PF10+)</span>
+        <img src="drlaser/ZDRU-BLT.png" alt="ZDRU.BLT" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+        <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZDRU.CAP - SMD CAPACITOR')">ORDER</button>
+        <img src="drlaser/ZDRU-CAP.png" alt="ZDRU.CAP" class="spare-img small-image">
+        <span class="spare-text">ZDRU.CAP - SMD CAPACITOR</span>
+        <img src="drlaser/ZDRU-CAP.png" alt="ZDRU.CAP" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+        <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZDRU.CIW - CABLE INTRANASAL WHITE')">ORDER</button>
+        <img src="drlaser/ZDRU-CIW.png" alt="ZDRU.CIW" class="spare-img small-image">
+        <span class="spare-text">ZDRU.CIW - CABLE INTRANASAL WHITE</span>
+        <img src="drlaser/ZDRU-CIW.png" alt="ZDRU.CIW" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+        <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZDRU.PBS - PUSH BUTTON SMD (for HIPLUS,PF10,PF10+)')">ORDER</button>
+        <img src="drlaser/ZDRU-PBS.png" alt="ZDRU.PBS" class="spare-img small-image">
+        <span class="spare-text">ZDRU.PBS - PUSH BUTTON SMD (for HIPLUS,PF10,PF10+)</span>
+        <img src="drlaser/ZDRU-PBS.png" alt="ZDRU.PBS" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+        <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZDRU.TL1H - TRANSPARENT LENS 1 HOLES')">ORDER</button>
+        <img src="drlaser/ZDRU-TL1H.png" alt="ZDRU.TL1H" class="spare-img small-image">
+        <span class="spare-text">ZDRU.TL1H - TRANSPARENT LENS 1 HOLES</span>
+        <img src="drlaser/ZDRU-TL1H.png" alt="ZDRU.TL1H" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+        <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZDRU.TL2H - TRANSPARENT LENS 2 HOLES')">ORDER</button>
+        <img src="drlaser/ZDRU-TL2H.png" alt="ZDRU.TL2H" class="spare-img small-image">
+        <span class="spare-text">ZDRU.TL2H - TRANSPARENT LENS 2 HOLES</span>
+        <img src="drlaser/ZDRU-TL2H.png" alt="ZDRU.TL2H" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+        <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZDRU.TL4H - TRANSPARENT LENS 4 HOLES')">ORDER</button>
+        <img src="drlaser/ZDRU-TL4H.png" alt="ZDRU.TL4H" class="spare-img small-image">
+        <span class="spare-text">ZDRU.TL4H - TRANSPARENT LENS 4 HOLES</span>
+        <img src="drlaser/ZDRU-TL4H.png" alt="ZDRU.TL4H" class="large-image">
+        </li>
+    </ul>
+
+    <div class="category" onclick="toggleSpareparts(7)">
+        <img src="perfect10.png" alt="DR LASER EVO">
+        DR LASER PERFECT 10+ G2
+        <span class="arrow">▶</span>
+    </div>
+    <ul class="spareparts">
+        <li onclick="showImage(this)">
+        <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZDR.BT - BUTTON DR LASER PERFECT 10 NEW')">ORDER</button>
+        <img src="drlaser/ZDR-BT.png" alt="ZDR.BT" class="spare-img small-image">
+        <span class="spare-text">ZDR.BT - BUTTON DR LASER PERFECT 10 NEW</span>
+        <img src="drlaser/ZDR-BT.png" alt="ZDR.BT" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+        <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZDR.ICP10N - IC REGULATOR DR LASER PERFECT 10 NEW')">ORDER</button>
+        <img src="drlaser/ZDR-ICP10N.png" alt="ZDR.ICP10N" class="spare-img small-image">
+        <span class="spare-text">ZDR.ICP10N - IC REGULATOR DR LASER PERFECT 10 NEW</span>
+        <img src="drlaser/ZDR-ICP10N.png" alt="ZDR.ICP10N" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+        <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZDR.IGL - INVISIBLE GENERATING LASER')">ORDER</button>
+        <img src="drlaser/ZDR-IGL.png" alt="ZDR.IGL" class="spare-img small-image">
+        <span class="spare-text">ZDR.IGL - INVISIBLE GENERATING LASER</span>
+        <img src="drlaser/ZDR-IGL.png" alt="ZDR.IGL" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+        <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZDR.LCDP10N - LCD DR LASER PERFECT 10 NEW')">ORDER</button>
+        <img src="drlaser/ZDR-LCDP10N.png" alt="ZDR.LCDP10N" class="spare-img small-image">
+        <span class="spare-text">ZDR.LCDP10N - LCD DR LASER PERFECT 10 NEW</span>
+        <img src="drlaser/ZDR-LCDP10N.png" alt="ZDR.LCDP10N" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+        <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZDR.SLP10 - SLONGSONG KARET INTRANASAL PERFECT 10')">ORDER</button>
+        <img src="drlaser/ZDR-SLP10.png" alt="ZDR.SLP10" class="spare-img small-image">
+        <span class="spare-text">ZDR.SLP10 - SLONGSONG KARET INTRANASAL PERFECT 10</span>
+        <img src="drlaser/ZDR-SLP10.png" alt="ZDR.SLP10" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+        <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZDRHP.TN - THE NEEDLE DR HI PLUS')">ORDER</button>
+        <img src="drlaser/ZDRHP-TN.png" alt="ZDRHP.TN" class="spare-img small-image">
+        <span class="spare-text">ZDRHP.TN - THE NEEDLE DR HI PLUS</span>
+        <img src="drlaser/ZDRHP-TN.png" alt="ZDRHP.TN" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+        <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZDR.WBP10N - WATCH BAND DR LASER PERFECT 10 NEW')">ORDER</button>
+        <img src="drlaser/ZDR-WBP10N.png" alt="ZDR.WBP10N" class="spare-img small-image">
+        <span class="spare-text">ZDR.WBP10N - WATCH BAND DR LASER PERFECT 10 NEW</span>
+        <img src="drlaser/ZDR-WBP10N.png" alt="ZDR.WBP10N" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+        <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZDRL.C47UF - ELEKTROLIT CONDENSATOR 47UF')">ORDER</button>
+        <img src="drlaser/ZDRL-C47UF.png" alt="ZDRL.C47UF" class="spare-img small-image">
+        <span class="spare-text">ZDRL.C47UF - ELEKTROLIT CONDENSATOR 47UF</span>
+        <img src="drlaser/ZDRL-C47UF.png" alt="ZDRL.C47UF" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+        <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZDRP10+.GLB - GENERATING LASER PERFECT 10+ WARNA BLUE')">ORDER</button>
+        <img src="drlaser/ZDRP10+-GLB.png" alt="ZDRP10+.GLB" class="spare-img small-image">
+        <span class="spare-text">ZDRP10+.GLB - GENERATING LASER PERFECT 10+ WARNA BLUE</span>
+        <img src="drlaser/ZDRP10+-GLB.png" alt="ZDRP10+.GLB" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+        <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZDRP10+.GLY - GENERATING LASER PERFECT 10+ WARNA YELLOW')">ORDER</button>
+        <img src="drlaser/ZDRP10+-GLY.png" alt="ZDRP10+.GLY" class="spare-img small-image">
+        <span class="spare-text">ZDRP10+.GLY - GENERATING LASER PERFECT 10+ WARNA YELLOW</span>
+        <img src="drlaser/ZDRP10+-GLY.png" alt="ZDRP10+.GLY" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+        <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZDRPN.LB - LITHIUM BATTERY DR LASER PERFECT 10 NEW')">ORDER</button>
+        <img src="drlaser/ZDRPN-LB.png" alt="ZDRPN.LB" class="spare-img small-image">
+        <span class="spare-text">ZDRPN.LB - LITHIUM BATTERY DR LASER PERFECT 10 NEW</span>
+        <img src="drlaser/ZDRPN-LB.png" alt="ZDRPN.LB" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+        <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZDRPN.LPCB - LASER BOARD FOR PERFECT 10')">ORDER</button>
+        <img src="drlaser/ZDRPN-LPCB.png" alt="ZDRPN.LPCB" class="spare-img small-image">
+        <span class="spare-text">ZDRPN.LPCB - LASER BOARD FOR PERFECT 10</span>
+        <img src="drlaser/ZDRPN-LPCB.png" alt="ZDRPN.LPCB" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+        <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZDRPN.SLB - STICKY LED FOR PERFECT 10')">ORDER</button>
+        <img src="drlaser/ZDRPN-SLB.png" alt="ZDRPN.SLB" class="spare-img small-image">
+        <span class="spare-text">ZDRPN.SLB - STICKY LED FOR PERFECT 10</span>
+        <img src="drlaser/ZDRPN-SLB.png" alt="ZDRPN.SLB" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+        <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZDRPN.TLDS - TRANSPARANT LENS OF DISPLAY SCREEN')">ORDER</button>
+        <img src="drlaser/ZDRPN-TLDS.png" alt="ZDRPN.TLDS" class="spare-img small-image">
+        <span class="spare-text">ZDRPN.TLDS - TRANSPARANT LENS OF DISPLAY SCREEN</span>
+        <img src="drlaser/ZDRPN-TLDS.png" alt="ZDRPN.TLDS" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+        <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZDRU.BLT - BOLT (for HIPLUS, PF10, PF10+)')">ORDER</button>
+        <img src="drlaser/ZDRU-BLT.png" alt="ZDRU.BLT" class="spare-img small-image">
+        <span class="spare-text">ZDRU.BLT - BOLT (for HIPLUS, PF10, PF10+)</span>
+        <img src="drlaser/ZDRU-BLT.png" alt="ZDRU.BLT" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+        <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZDRU.CAP - SMD CAPACITOR')">ORDER</button>
+        <img src="drlaser/ZDRU-CAP.png" alt="ZDRU.CAP" class="spare-img small-image">
+        <span class="spare-text">ZDRU.CAP - SMD CAPACITOR</span>
+        <img src="drlaser/ZDRU-CAP.png" alt="ZDRU.CAP" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+        <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZDRU.PBS - PUSH BUTTON SMD (for HIPLUS,PF10,PF10+)')">ORDER</button>
+        <img src="drlaser/ZDRU-PBS.png" alt="ZDRU.PBS" class="spare-img small-image">
+        <span class="spare-text">ZDRU.PBS - PUSH BUTTON SMD (for HIPLUS,PF10,PF10+)</span>
+        <img src="drlaser/ZDRU-PBS.png" alt="ZDRU.PBS" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+        <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZDRU.TL1H - TRANSPARENT LENS 1 HOLES')">ORDER</button>
+        <img src="drlaser/ZDRU-TL1H.png" alt="ZDRU.TL1H" class="spare-img small-image">
+        <span class="spare-text">ZDRU.TL1H - TRANSPARENT LENS 1 HOLES</span>
+        <img src="drlaser/ZDRU-TL1H.png" alt="ZDRU.TL1H" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+        <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZDRU.TL2H - TRANSPARENT LENS 2 HOLES')">ORDER</button>
+        <img src="drlaser/ZDRU-TL2H.png" alt="ZDRU.TL2H" class="spare-img small-image">
+        <span class="spare-text">ZDRU.TL2H - TRANSPARENT LENS 2 HOLES</span>
+        <img src="drlaser/ZDRU-TL2H.png" alt="ZDRU.TL2H" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+        <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZDRU.TL4H - TRANSPARENT LENS 4 HOLES')">ORDER</button>
+        <img src="drlaser/ZDRU-TL4H.png" alt="ZDRU.TL4H" class="spare-img small-image">
+        <span class="spare-text">ZDRU.TL4H - TRANSPARENT LENS 4 HOLES</span>
+        <img src="drlaser/ZDRU-TL4H.png" alt="ZDRU.TL4H" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+        <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZDRPN.A - ADAPTOR FOR PERFECT 10 G2')">ORDER</button>
+        <img src="drlaser/ZDRPN-A.png" alt="ZDRPN.A" class="spare-img small-image">
+        <span class="spare-text">ZDRPN.A - ADAPTOR FOR PERFECT 10 G2</span>
+        <img src="drlaser/ZDRPN-A.png" alt="ZDRPN.A" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+        <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZDRPN.CIWG2 - CABLE INTRANASAL WHITE G2')">ORDER</button>
+        <img src="drlaser/ZDRPN-CIWG2.png" alt="ZDRPN.CIWG2" class="spare-img small-image">
+        <span class="spare-text">ZDRPN.CIWG2 - CABLE INTRANASAL WHITE G2</span>
+        <img src="drlaser/ZDRPN-CIWG2.png" alt="ZDRPN.CIWG2" class="large-image">
+        </li>
+
+        <li onclick="showImage(this)">
+        <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZDRPN.MCBG2 - MAIN CIRCUIT BOARD FOR PERFECT 10 G2')">ORDER</button>
+        <img src="drlaser/ZDRPN-MCBG2.png" alt="ZDRPN.MCBG2" class="spare-img small-image">
+        <span class="spare-text">ZDRPN.MCBG2 - MAIN CIRCUIT BOARD FOR PERFECT 10 G2</span>
+        <img src="drlaser/ZDRPN-MCBG2.png" alt="ZDRPN.MCBG2" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+        <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZDRPN.NAA - NASAL ADAPTER AUX TO TYPE C PERFECT 10 PLUS G2')">ORDER</button>
+        <img src="drlaser/ZDRPN-NAA.png" alt="ZDRPN.NAA" class="spare-img small-image">
+        <span class="spare-text">ZDRPN.NAA - NASAL ADAPTER AUX TO TYPE C PERFECT 10 PLUS G2</span>
+        <img src="drlaser/ZDRPN-NAA.png" alt="ZDRPN.NAA" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+        <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZDRPN.TCS - TYPE C FEMALE SOCKET FOR PERFECT 10 G2')">ORDER</button>
+        <img src="drlaser/ZDRPN-TCS.png" alt="ZDRPN.TCS" class="spare-img small-image">
+        <span class="spare-text">ZDRPN.TCS - TYPE C FEMALE SOCKET FOR PERFECT 10 G2</span>
+        <img src="drlaser/ZDRPN-TCS.png" alt="ZDRPN.TCS" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+        <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZDRPN.USBC - USB CABLE C TYPE FOR PERFECT 10 G2')">ORDER</button>
+        <img src="drlaser/ZDRPN-USBC.png" alt="ZDRPN.USBC" class="spare-img small-image">
+        <span class="spare-text">ZDRPN.USBC - USB CABLE C TYPE FOR PERFECT 10 G2</span>
+        <img src="drlaser/ZDRPN-USBC.png" alt="ZDRPN.USBC" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+        <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZDRPN.WCG2 - WATCHCASE PERFECT 10 G2')">ORDER</button>
+        <img src="drlaser/ZDRPN-WCG2.png" alt="ZDRPN.WCG2" class="spare-img small-image">
+        <span class="spare-text">ZDRPN.WCG2 - WATCHCASE PERFECT 10 G2</span>
+        <img src="drlaser/ZDRPN-WCG2.png" alt="ZDRPN.WCG2" class="large-image">
+        </li>
+        
+    </ul>
+    <div class="category" onclick="toggleSpareparts(8)">
+        <img src="supreme.png" alt="DR LASER EVO">
+        DR LASER SUPREME
+        <span class="arrow">▶</span>
+    </div>
+    <ul class="spareparts">
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZDRS.A - ADAPTOR FOR DR LASER SUPREME')">ORDER</button>
+          <img src="supreme/ZDRS-A.png" alt="IMG" class="spare-img small-image">
+          <span class="spare-text">ZDRS.A - ADAPTOR FOR DR LASER SUPREME</span>
+          <img src="supreme/ZDRS-A.png" alt="ZDRS.A" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZDRS.B - BUCKLE FOR DR LASER SUPREME')">ORDER</button>
+          <img src="supreme/ZDRS-B.png" alt="IMG" class="spare-img small-image">
+          <span class="spare-text">ZDRS.B - BUCKLE FOR DR LASER SUPREME</span>
+          <img src="supreme/ZDRS-B.png" alt="ZDRS.B" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZDRS.BC - BUTTON CASE FOR DR LASER SUPREME')">ORDER</button>
+          <img src="supreme/ZDRS-BC.png" alt="IMG" class="spare-img small-image">
+          <span class="spare-text">ZDRS.BC - BUTTON CASE FOR DR LASER SUPREME</span>
+          <img src="supreme/ZDRS-BC.png" alt="ZDRS.BC" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZDRS.BCB - BACK CASE BODY FOR DR LASER SUPREME')">ORDER</button>
+          <img src="supreme/ZDRS-BCB.png" alt="IMG" class="spare-img small-image">
+          <span class="spare-text">ZDRS.BCB - BACK CASE BODY FOR DR LASER SUPREME</span>
+          <img src="supreme/ZDRS-BCB.png" alt="ZDRS.BCB" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZDRS.FFC - FLAT FLEXIBLE CABLE FOR DR LASER SUPREME')">ORDER</button>
+          <img src="supreme/ZDRS-FFC.png" alt="IMG" class="spare-img small-image">
+          <span class="spare-text">ZDRS.FFC - FLAT FLEXIBLE CABLE FOR DR LASER SUPREME</span>
+          <img src="supreme/ZDRS-FFC.png" alt="ZDRS.FFC" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZDRS.FH - FRAME HOLDER FOR DR LASER SUPREME')">ORDER</button>
+          <img src="supreme/ZDRS-FH.png" alt="IMG" class="spare-img small-image">
+          <span class="spare-text">ZDRS.FH - FRAME HOLDER FOR DR LASER SUPREME</span>
+          <img src="supreme/ZDRS-FH.png" alt="ZDRS.FH" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZDRS.GLL - GREEN LLLT LED FOR DR LASER SUPREME')">ORDER</button>
+          <img src="supreme/ZDRS-GLL.png" alt="IMG" class="spare-img small-image">
+          <span class="spare-text">ZDRS.GLL - GREEN LLLT LED FOR DR LASER SUPREME</span>
+          <img src="supreme/ZDRS-GLL.png" alt="ZDRS.GLL" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZDRS.LB - LITHIUM BATTERY 1000MAH FOR DR LASER SUPREME')">ORDER</button>
+          <img src="supreme/ZDRS-LB.png" alt="IMG" class="spare-img small-image">
+          <span class="spare-text">ZDRS.LB - LITHIUM BATTERY 1000MAH FOR DR LASER SUPREME</span>
+          <img src="supreme/ZDRS-LB.png" alt="ZDRS.LB" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZDRS.LCB - LASER CIRCUIT BOARD FOR DR LASER SUPREME')">ORDER</button>
+          <img src="supreme/ZDRS-LCB.png" alt="IMG" class="spare-img small-image">
+          <span class="spare-text">ZDRS.LCB - LASER CIRCUIT BOARD FOR DR LASER SUPREME</span>
+          <img src="supreme/ZDRS-LCB.png" alt="ZDRS.LCB" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZDRS.LCD - DISPLAY LCD FOR DR LASER SUPREME')">ORDER</button>
+          <img src="supreme/ZDRS-LCD.png" alt="IMG" class="spare-img small-image">
+          <span class="spare-text">ZDRS.LCD - DISPLAY LCD FOR DR LASER SUPREME</span>
+          <img src="supreme/ZDRS-LCD.png" alt="ZDRS.LCD" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZDRS.LCDDF - LCD DUSTPROOF FOAM FOR DR LASER SUPREME')">ORDER</button>
+          <img src="supreme/ZDRS-LCDDF.png" alt="IMG" class="spare-img small-image">
+          <span class="spare-text">ZDRS.LCDDF - LCD DUSTPROOF FOAM FOR DR LASER SUPREME</span>
+          <img src="supreme/ZDRS-LCDDF.png" alt="ZDRS.LCDDF" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZDRS.LG - LASER GASKET FOR DR LASER SUPREME')">ORDER</button>
+          <img src="supreme/ZDRS-LG.png" alt="IMG" class="spare-img small-image">
+          <span class="spare-text">ZDRS.LG - LASER GASKET FOR DR LASER SUPREME</span>
+          <img src="supreme/ZDRS-LG.png" alt="ZDRS.LG" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZDRS.LHS - LASER HEAT SINK FOR DR LASER SUPREME')">ORDER</button>
+          <img src="supreme/ZDRS-LHS.png" alt="IMG" class="spare-img small-image">
+          <span class="spare-text">ZDRS.LHS - LASER HEAT SINK FOR DR LASER SUPREME</span>
+          <img src="supreme/ZDRS-LHS.png" alt="ZDRS.LHS" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZDRS.M - MICROCHIP FOR DR LASER SUPREME')">ORDER</button>
+          <img src="supreme/ZDRS-M.png" alt="IMG" class="spare-img small-image">
+          <span class="spare-text">ZDRS.M - MICROCHIP FOR DR LASER SUPREME</span>
+          <img src="supreme/ZDRS-M.png" alt="ZDRS.M" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZDRS.MCB - MAIN CIRCUIT BOARD FOR DR LASER SUPREME')">ORDER</button>
+          <img src="supreme/ZDRS-MCB.png" alt="IMG" class="spare-img small-image">
+          <span class="spare-text">ZDRS.MCB - MAIN CIRCUIT BOARD FOR DR LASER SUPREME</span>
+          <img src="supreme/ZDRS-MCB.png" alt="ZDRS.MCB" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZDRS.NFH - NEEDLE OF FRAME HOLDER FOR DR LASER SUPREME')">ORDER</button>
+          <img src="supreme/ZDRS-NFH.png" alt="IMG" class="spare-img small-image">
+          <span class="spare-text">ZDRS.NFH - NEEDLE OF FRAME HOLDER FOR DR LASER SUPREME</span>
+          <img src="supreme/ZDRS-NFH.png" alt="ZDRS.NFH" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZDRS.PFP - PLASTIC FILM PROTECTOR FOR DR LASER SUPREME')">ORDER</button>
+          <img src="supreme/ZDRS-PFP.png" alt="IMG" class="spare-img small-image">
+          <span class="spare-text">ZDRS.PFP - PLASTIC FILM PROTECTOR FOR DR LASER SUPREME</span>
+          <img src="supreme/ZDRS-PFP.png" alt="ZDRS.PFP" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZDRS.RGL - RED GENERATING LASER FOR DR LASER SUPREME')">ORDER</button>
+          <img src="supreme/ZDRS-RGL.png" alt="IMG" class="spare-img small-image">
+          <span class="spare-text">ZDRS.RGL - RED GENERATING LASER FOR DR LASER SUPREME</span>
+          <img src="supreme/ZDRS-RGL.png" alt="ZDRS.RGL" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZDRS.S - SPRING FOR DR LASER SUPREME')">ORDER</button>
+          <img src="supreme/ZDRS-S.png" alt="IMG" class="spare-img small-image">
+          <span class="spare-text">ZDRS.S - SPRING FOR DR LASER SUPREME</span>
+          <img src="supreme/ZDRS-S.png" alt="ZDRS.S" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZDRS.SFS - SCREW FOR DR LASER SUPREME')">ORDER</button>
+          <img src="supreme/ZDRS-SFS.png" alt="IMG" class="spare-img small-image">
+          <span class="spare-text">ZDRS.SFS - SCREW FOR DR LASER SUPREME</span>
+          <img src="supreme/ZDRS-SFS.png" alt="ZDRS.SFS" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZDRS.SICHUB - STABILIZER IC CHUB 3V3 SOT23 FOR DR LASER SUPREME')">ORDER</button>
+          <img src="supreme/ZDRS-SICHUB.png" alt="IMG" class="spare-img small-image">
+          <span class="spare-text">ZDRS.SICHUB - STABILIZER IC CHUB 3V3 SOT23 FOR DR LASER SUPREME</span>
+          <img src="supreme/ZDRS-SICHUB.png" alt="ZDRS.SICHUB" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZDRS.SLBS - STICKY LED BACK SCREEN FOR DR LASER SUPREME')">ORDER</button>
+          <img src="supreme/ZDRS-SLBS.png" alt="IMG" class="spare-img small-image">
+          <span class="spare-text">ZDRS.SLBS - STICKY LED BACK SCREEN FOR DR LASER SUPREME</span>
+          <img src="supreme/ZDRS-SLBS.png" alt="ZDRS.SLBS" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZDRS.SPB - SMD PUSH BUTTON FOR DR LASER SUPREME')">ORDER</button>
+          <img src="supreme/ZDRS-SPB.png" alt="IMG" class="spare-img small-image">
+          <span class="spare-text">ZDRS.SPB - SMD PUSH BUTTON FOR DR LASER SUPREME</span>
+          <img src="supreme/ZDRS-SPB.png" alt="ZDRS.SPB" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZDRS.TLDS - TRANSPARENT LENS OF DISPLAY SCREEN FOR DR LASER SUPREME')">ORDER</button>
+          <img src="supreme/ZDRS-TLDS.png" alt="IMG" class="spare-img small-image">
+          <span class="spare-text">ZDRS.TLDS - TRANSPARENT LENS OF DISPLAY SCREEN FOR DR LASER SUPREME</span>
+          <img src="supreme/ZDRS-TLDS.png" alt="ZDRS.TLDS" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZDRS.TSC - TYPE-C SOCKET CHARGER FOR DR LASER SUPREME')">ORDER</button>
+          <img src="supreme/ZDRS-TSC.png" alt="IMG" class="spare-img small-image">
+          <span class="spare-text">ZDRS.TSC - TYPE-C SOCKET CHARGER FOR DR LASER SUPREME</span>
+          <img src="supreme/ZDRS-TSC.png" alt="ZDRS.TSC" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZDRS.USBC - USB CABLE TYPE C FOR DR LASER SUPREME')">ORDER</button>
+          <img src="supreme/ZDRS-USBC.png" alt="IMG" class="spare-img small-image">
+          <span class="spare-text">ZDRS.USBC - USB CABLE TYPE C FOR DR LASER SUPREME</span>
+          <img src="supreme/ZDRS-USBC.png" alt="ZDRS.USBC" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZDRS.WB - WATCH BAND FOR DR LASER SUPREME')">ORDER</button>
+          <img src="supreme/ZDRS-WB.png" alt="IMG" class="spare-img small-image">
+          <span class="spare-text">ZDRS.WB - WATCH BAND FOR DR LASER SUPREME</span>
+          <img src="supreme/ZDRS-WB.png" alt="ZDRS.WB" class="large-image">
+        </li> 
+    </ul>
+
+    <div class="category" onclick="toggleSpareparts(9)">
+        <img src="it.png" alt="DR LASER EVO">
+        DR LASER PICO
+        <span class="arrow">▶</span>
+    </div>
+    <ul class="spareparts">
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZDRPC.BC - BUTTON CASE PICO')">ORDER</button>
+          <img src="drpico/ZDRPC-BC.png" alt="ZDRPC-BC" class="spare-img small-image">
+          <span class="spare-text">ZDRPC.BC - BUTTON CASE PICO</span>
+          <img src="drpico/ZDRPC-BC.png" alt="ZDRPC-BC" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZDRPC.BCI - LASER PROBE NASAL CAVITY FOR PICO')">ORDER</button>
+          <img src="drpico/ZDRPC-BCI.png" alt="ZDRPC-BCI" class="spare-img small-image">
+          <span class="spare-text">ZDRPC.BCI - LASER PROBE NASAL CAVITY FOR PICO</span>
+          <img src="drpico/ZDRPC-BCI.png" alt="ZDRPC-BCI" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZDRPC.BZ - BUZZER FOR PICO')">ORDER</button>
+          <img src="drpico/ZDRPC-BZ.png" alt="ZDRPC-BZ" class="spare-img small-image">
+          <span class="spare-text">ZDRPC.BZ - BUZZER FOR PICO</span>
+          <img src="drpico/ZDRPC-BZ.png" alt="ZDRPC-BZ" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZDRPC.CIB - CABLE INTRANASAL BLACK PICO')">ORDER</button>
+          <img src="drpico/ZDRPC-CIB.png" alt="ZDRPC-CIB" class="spare-img small-image">
+          <span class="spare-text">ZDRPC.CIB - CABLE INTRANASAL BLACK PICO</span>
+          <img src="drpico/ZDRPC-CIB.png" alt="ZDRPC-CIB" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZDRPC.CP - CHARGER PICO')">ORDER</button>
+          <img src="drpico/ZDRPC-CP.png" alt="ZDRPC-CP" class="spare-img small-image">
+          <span class="spare-text">ZDRPC.CP - CHARGER PICO</span>
+          <img src="drpico/ZDRPC-CP.png" alt="ZDRPC-CP" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZDRPC.ICM - MICROCHIP PICO')">ORDER</button>
+          <img src="drpico/ZDRPC-ICM.png" alt="ZDRPC-ICM" class="spare-img small-image">
+          <span class="spare-text">ZDRPC.ICM - MICROCHIP PICO</span>
+          <img src="drpico/ZDRPC-ICM.png" alt="ZDRPC-ICM" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZDRPC.LCB - LASER CIRCUIT BOARD PICO')">ORDER</button>
+          <img src="drpico/ZDRPC-LCB.png" alt="ZDRPC-LCB" class="spare-img small-image">
+          <span class="spare-text">ZDRPC.LCB - LASER CIRCUIT BOARD PICO</span>
+          <img src="drpico/ZDRPC-LCB.png" alt="ZDRPC-LCB" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZDRPC.LCD - DISPLAY LCD PICO')">ORDER</button>
+          <img src="drpico/ZDRPC-LCD.png" alt="ZDRPC-LCD" class="spare-img small-image">
+          <span class="spare-text">ZDRPC.LCD - DISPLAY LCD PICO</span>
+          <img src="drpico/ZDRPC-LCD.png" alt="ZDRPC-LCD" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZDRPC.MBCD - MAIN BOARD CHIP CENTER & DISPLAY PICO')">ORDER</button>
+          <img src="drpico/ZDRPC-MBCD.png" alt="ZDRPC-MBCD" class="spare-img small-image">
+          <span class="spare-text">ZDRPC.MBCD - MAIN BOARD CHIP CENTER & DISPLAY PICO</span>
+          <img src="drpico/ZDRPC-MBCD.png" alt="ZDRPC-MBCD" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZDRPC.PB - SMD PUSH BUTTON PICO')">ORDER</button>
+          <img src="drpico/ZDRPC-PB.png" alt="ZDRPC-PB" class="spare-img small-image">
+          <span class="spare-text">ZDRPC.PB - SMD PUSH BUTTON PICO</span>
+          <img src="drpico/ZDRPC-PB.png" alt="ZDRPC-PB" class="large-image">
+        </li>
+        
+        
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZDRPC.SI - SOCKET INTRANASAL 3.5 MM FEMALE SOCKET')">ORDER</button>
+          <img src="drpico/ZDRPC-SI.png" alt="ZDRPC-SI" class="spare-img small-image">
+          <span class="spare-text">ZDRPC.SI - SOCKET INTRANASAL 3.5 MM FEMALE SOCKET</span>
+          <img src="drpico/ZDRPC-SI.png" alt="ZDRPC-SI" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZDRPC.SLB - STICKY LED BACKSCREEN FOR PICO')">ORDER</button>
+          <img src="drpico/ZDRPC-SLB.png" alt="ZDRPC-SLB" class="spare-img small-image">
+          <span class="spare-text">ZDRPC.SLB - STICKY LED BACKSCREEN FOR PICO</span>
+          <img src="drpico/ZDRPC-SLB.png" alt="ZDRPC-SLB" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZDRPC.WB - WATCHBAND PICO')">ORDER</button>
+          <img src="drpico/ZDRPC-WB.png" alt="ZDRPC-WB" class="spare-img small-image">
+          <span class="spare-text">ZDRPC.WB - WATCHBAND PICO</span>
+          <img src="drpico/ZDRPC-WB.png" alt="ZDRPC-WB" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZDRPC.WC - WATCHCASE FOR PICO')">ORDER</button>
+          <img src="drpico/ZDRPC-WC.png" alt="ZDRPC-WC" class="spare-img small-image">
+          <span class="spare-text">ZDRPC.WC - WATCHCASE FOR PICO</span>
+          <img src="drpico/ZDRPC-WC.png" alt="ZDRPC-WC" class="large-image">
+        </li>
+        
+    </ul>
+    <div class="category" onclick="toggleSpareparts(10)">
+        <img src="pico_new.png" alt="DR LASER EVO">
+        ACULASER PICO NEW
+        <span class="arrow">▶</span>
+    </div>
+    <ul class="spareparts">
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZALA.BCTL10 - BACK CASE WITH TRANSPARENT LENS 10 HOLES FOR PICO NEW')">ORDER</button>
+          <img src="aculpico/ZALA-BCTL10.png" alt="IMG" class="spare-img small-image">
+          <span class="spare-text">ZALA.BCTL10 - BACK CASE WITH TRANSPARENT LENS 10 HOLES FOR PICO NEW</span>
+          <img src="aculpico/ZALA-BCTL10.png" alt="ZALA.BCTL10" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZALA.DRI - DISPLAY REGULATOR IC FOR PICO NEW')">ORDER</button>
+          <img src="aculpico/ZALA-DRI.png" alt="IMG" class="spare-img small-image">
+          <span class="spare-text">ZALA.DRI - DISPLAY REGULATOR IC FOR PICO NEW</span>
+          <img src="aculpico/ZALA-DRI.png" alt="ZALA.DRI" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZALA.FCB - FRONT CASE BODY FOR PICO NEW')">ORDER</button>
+          <img src="aculpico/ZALA-FCB.png" alt="IMG" class="spare-img small-image">
+          <span class="spare-text">ZALA.FCB - FRONT CASE BODY FOR PICO NEW</span>
+          <img src="aculpico/ZALA-FCB.png" alt="ZALA.FCB" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZALA.LB - LITHIUM BATTERY FOR PICO NEW')">ORDER</button>
+          <img src="aculpico/ZALA-LB.png" alt="IMG" class="spare-img small-image">
+          <span class="spare-text">ZALA.LB - LITHIUM BATTERY FOR PICO NEW</span>
+          <img src="aculpico/ZALA-LB.png" alt="ZALA.LB" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZALA.LCB - LASER CIRCUIT BOARD FOR PICO NEW')">ORDER</button>
+          <img src="aculpico/ZALA-LCB.png" alt="IMG" class="spare-img small-image">
+          <span class="spare-text">ZALA.LCB - LASER CIRCUIT BOARD FOR PICO NEW</span>
+          <img src="aculpico/ZALA-LCB.png" alt="ZALA.LCB" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZALA.LCD - LCD FOR PICO NEW')">ORDER</button>
+          <img src="aculpico/ZALA-LCD.png" alt="IMG" class="spare-img small-image">
+          <span class="spare-text">ZALA.LCD - LCD FOR PICO NEW</span>
+          <img src="aculpico/ZALA-LCD.png" alt="ZALA.LCD" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZALA.LH - LASER HEATSINK FOR PICO NEW')">ORDER</button>
+          <img src="aculpico/ZALA-LH.png" alt="IMG" class="spare-img small-image">
+          <span class="spare-text">ZALA.LH - LASER HEATSINK FOR PICO NEW</span>
+          <img src="aculpico/ZALA-LH.png" alt="ZALA.LH" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZALA.MCB - MAIN CIRCUIT BOARD FOR PICO NEW')">ORDER</button>
+          <img src="aculpico/ZALA-MCB.png" alt="IMG" class="spare-img small-image">
+          <span class="spare-text">ZALA.MCB - MAIN CIRCUIT BOARD FOR PICO NEW</span>
+          <img src="aculpico/ZALA-MCB.png" alt="ZALA.MCB" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZALA.PCB - PUSH BUTTON CASE FOR PICO NEW')">ORDER</button>
+          <img src="aculpico/ZALA-PCB.png" alt="IMG" class="spare-img small-image">
+          <span class="spare-text">ZALA.PCB - PUSH BUTTON CASE FOR PICO NEW</span>
+          <img src="aculpico/ZALA-PCB.png" alt="ZALA.PCB" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZALA.SLED - STICKY LED BACK SCREEN FOR PICO NEW')">ORDER</button>
+          <img src="aculpico/ZALA-SLED.png" alt="IMG" class="spare-img small-image">
+          <span class="spare-text">ZALA.SLED - STICKY LED BACK SCREEN FOR PICO NEW</span>
+          <img src="aculpico/ZALA-SLED.png" alt="ZALA.SLED" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZALA.SMDP - SMD PUSH BUTTON FOR PICO NEW')">ORDER</button>
+          <img src="aculpico/ZALA-SMDP.png" alt="IMG" class="spare-img small-image">
+          <span class="spare-text">ZALA.SMDP - SMD PUSH BUTTON FOR PICO NEW</span>
+          <img src="aculpico/ZALA-SMDP.png" alt="ZALA.SMDP" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZALA.TLDS - TRANSPARENT LENS OF DISPLAY SCREEN FOR PICO NEW')">ORDER</button>
+          <img src="aculpico/ZALA-TLDS.png" alt="IMG" class="spare-img small-image">
+          <span class="spare-text">ZALA.TLDS - TRANSPARENT LENS OF DISPLAY SCREEN FOR PICO NEW</span>
+          <img src="aculpico/ZALA-TLDS.png" alt="ZALA.TLDS" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZALU.A - ADAPTOR FOR ACULASER')">ORDER</button>
+          <img src="aculpico/ZALU-A.png" alt="IMG" class="spare-img small-image">
+          <span class="spare-text">ZALU.A - ADAPTOR FOR ACULASER</span>
+          <img src="aculpico/ZALU-A.png" alt="ZALU.A" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZALU.BGL - BLUE GENERATING LASER FOR ACULASER')">ORDER</button>
+          <img src="aculpico/ZALU-BGL.png" alt="IMG" class="spare-img small-image">
+          <span class="spare-text">ZALU.BGL - BLUE GENERATING LASER FOR ACULASER</span>
+          <img src="aculpico/ZALU-BGL.png" alt="ZALU.BGL" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZALU.BOLT - BOLT FOR ACULASER')">ORDER</button>
+          <img src="aculpico/ZALU-BOLT.png" alt="IMG" class="spare-img small-image">
+          <span class="spare-text">ZALU.BOLT - BOLT FOR ACULASER</span>
+          <img src="aculpico/ZALU-BOLT.png" alt="ZALU.BOLT" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZALU.BZ - MICRO BUZZER FOR ACULASER')">ORDER</button>
+          <img src="aculpico/ZALU-BZ.png" alt="IMG" class="spare-img small-image">
+          <span class="spare-text">ZALU.BZ - MICRO BUZZER FOR ACULASER</span>
+          <img src="aculpico/ZALU-BZ.png" alt="ZALU.BZ" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZALU.CIC - CHARGING IC FOR HJG65D')">ORDER</button>
+          <img src="aculpico/ZALU-CIC.png" alt="IMG" class="spare-img small-image">
+          <span class="spare-text">ZALU.CIC - CHARGING IC FOR HJG65D</span>
+          <img src="aculpico/ZALU-CIC.png" alt="ZALU.CIC" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZALU.EMSS - EMS SOCKET FOR HJG65D')">ORDER</button>
+          <img src="aculpico/ZALU-EMSS.png" alt="IMG" class="spare-img small-image">
+          <span class="spare-text">ZALU.EMSS - EMS SOCKET FOR HJG65D</span>
+          <img src="aculpico/ZALU-EMSS.png" alt="ZALU.EMSS" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZALU.LEDB - LED BACKSCREEN FOR ACULASER')">ORDER</button>
+          <img src="aculpico/ZALU-LEDB.png" alt="IMG" class="spare-img small-image">
+          <span class="spare-text">ZALU.LEDB - LED BACKSCREEN FOR ACULASER</span>
+          <img src="aculpico/ZALU-LEDB.png" alt="ZALU.LEDB" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZALU.N - NEEDLE ACULASER FOR ACULASER')">ORDER</button>
+          <img src="aculpico/ZALU-N.png" alt="IMG" class="spare-img small-image">
+          <span class="spare-text">ZALU.N - NEEDLE ACULASER FOR ACULASER</span>
+          <img src="aculpico/ZALU-N.png" alt="ZALU.N" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZALU.PCC - PAIN PROBE CABLE TYPE C ACULASER')">ORDER</button>
+          <img src="aculpico/ZALU-PCC.png" alt="IMG" class="spare-img small-image">
+          <span class="spare-text">ZALU.PCC - PAIN PROBE CABLE TYPE C ACULASER</span>
+          <img src="aculpico/ZALU-PCC.png" alt="ZALU.PCC" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZALU.PI - POWER INDUCTOR 2.2MH FOR ACULASER')">ORDER</button>
+          <img src="aculpico/ZALU-PI.png" alt="IMG" class="spare-img small-image">
+          <span class="spare-text">ZALU.PI - POWER INDUCTOR 2.2MH FOR ACULASER</span>
+          <img src="aculpico/ZALU-PI.png" alt="ZALU.PI" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZALU.RGL - RED GENERATING LASER FOR ACULASER')">ORDER</button>
+          <img src="aculpico/ZALU-RGL.png" alt="IMG" class="spare-img small-image">
+          <span class="spare-text">ZALU.RGL - RED GENERATING LASER FOR ACULASER</span>
+          <img src="aculpico/ZALU-RGL.png" alt="ZALU.RGL" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZALU.SI - SILICON INTRANASAL FOR ACULASER')">ORDER</button>
+          <img src="aculpico/ZALU-SI.png" alt="IMG" class="spare-img small-image">
+          <span class="spare-text">ZALU.SI - SILICON INTRANASAL FOR ACULASER</span>
+          <img src="aculpico/ZALU-SI.png" alt="ZALU.SI" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZALU.SIC - SOT IC FOR ACULASER')">ORDER</button>
+          <img src="aculpico/ZALU-SIC.png" alt="IMG" class="spare-img small-image">
+          <span class="spare-text">ZALU.SIC - SOT IC FOR ACULASER</span>
+          <img src="aculpico/ZALU-SIC.png" alt="ZALU.SIC" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZALU.SMDC - SMD CAPACITOR FOR ACULASER')">ORDER</button>
+          <img src="aculpico/ZALU-SMDC.png" alt="IMG" class="spare-img small-image">
+          <span class="spare-text">ZALU.SMDC - SMD CAPACITOR FOR ACULASER</span>
+          <img src="aculpico/ZALU-SMDC.png" alt="ZALU.SMDC" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZALU.SMDD - SMD DIODE FOR ACULASER')">ORDER</button>
+          <img src="aculpico/ZALU-SMDD.png" alt="IMG" class="spare-img small-image">
+          <span class="spare-text">ZALU.SMDD - SMD DIODE FOR ACULASER</span>
+          <img src="aculpico/ZALU-SMDD.png" alt="ZALU.SMDD" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZALU.SMDT - SMD TRANSISTOR FOR ACULASER')">ORDER</button>
+          <img src="aculpico/ZALU-SMDT.png" alt="IMG" class="spare-img small-image">
+          <span class="spare-text">ZALU.SMDT - SMD TRANSISTOR FOR ACULASER</span>
+          <img src="aculpico/ZALU-SMDT.png" alt="ZALU.SMDT" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZALU.TCS - TYPE C SOCKET FOR ACULASER')">ORDER</button>
+          <img src="aculpico/ZALU-TCS.png" alt="IMG" class="spare-img small-image">
+          <span class="spare-text">ZALU.TCS - TYPE C SOCKET FOR ACULASER</span>
+          <img src="aculpico/ZALU-TCS.png" alt="ZALU.TCS" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZALU.USBC - USB CABLE C TYPE FOR ACULASER')">ORDER</button>
+          <img src="aculpico/ZALU-USBC.png" alt="IMG" class="spare-img small-image">
+          <span class="spare-text">ZALU.USBC - USB CABLE C TYPE FOR ACULASER</span>
+          <img src="aculpico/ZALU-USBC.png" alt="ZALU.USBC" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZALU.VRIC - VOLTAGE REGULATOR IC')">ORDER</button>
+          <img src="aculpico/ZALU-VRIC.png" alt="IMG" class="spare-img small-image">
+          <span class="spare-text">ZALU.VRIC - VOLTAGE REGULATOR IC</span>
+          <img src="aculpico/ZALU-VRIC.png" alt="ZALU.VRIC" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZALU.WB - WATCHBAND ACULASER FOR ACULASER (NEW MODEL)')">ORDER</button>
+          <img src="aculpico/ZALU-WB.png" alt="IMG" class="spare-img small-image">
+          <span class="spare-text">ZALU.WB - WATCHBAND ACULASER FOR ACULASER (NEW MODEL)</span>
+          <img src="aculpico/ZALU-WB.png" alt="ZALU.WB" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZALU.YGL - YELLOW GENERATING LASER FOR ACULASER')">ORDER</button>
+          <img src="aculpico/ZALU-YGL.png" alt="IMG" class="spare-img small-image">
+          <span class="spare-text">ZALU.YGL - YELLOW GENERATING LASER FOR ACULASER</span>
+          <img src="aculpico/ZALU-YGL.png" alt="ZALU.YGL" class="large-image">
+        </li>
+    </ul>
+
+    <div class="category" onclick="toggleSpareparts(11)">
+        <img src="it.png" alt="DR LASER EVO">
+        ACULASER PREMIUM
+        <span class="arrow">▶</span>
+    </div>
+    <ul class="spareparts">
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZALP.BCTL10 - BACK CASE WITH TRANSPARENT LENS 10 HOLES FOR PREMIUM')">ORDER</button>
+          <img src="premium/ZALP-BCTL10.png" alt="IMG" class="spare-img small-image"> <!-- Gambar kecil -->
+          <span class="spare-text">ZALP.BCTL10 - BACK CASE WITH TRANSPARENT LENS 10 HOLES FOR PREMIUM</span>
+          <img src="premium/ZALP-BCTL10.png" alt="ZALP.BCTL10" class="large-image"> <!-- Gambar besar -->
+        </li>
+        
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZALP.LCB - LASER CIRCUIT BOARD FOR PREMIUM')">ORDER</button>
+          <img src="premium/ZALP-LCB.png" alt="IMG" class="spare-img small-image"> <!-- Gambar kecil -->
+          <span class="spare-text">ZALP.LCB - LASER CIRCUIT BOARD FOR PREMIUM</span>
+          <img src="premium/ZALP-LCB.png" alt="ZALP.LCB" class="large-image"> <!-- Gambar besar -->
+        </li>
+        
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZALP.MCB - MAIN CIRCUIT BOARD FOR PREMIUM')">ORDER</button>
+          <img src="premium/ZALP-MCB.png" alt="IMG" class="spare-img small-image"> <!-- Gambar kecil -->
+          <span class="spare-text">ZALP.MCB - MAIN CIRCUIT BOARD FOR PREMIUM</span>
+          <img src="premium/ZALP-MCB.png" alt="ZALP.MCB" class="large-image"> <!-- Gambar besar -->
+        </li>
+    </ul>
+        
+    <div class="category" onclick="toggleSpareparts(12)">
+        <img src="ultimate.png" alt="DR LASER EVO">
+        ACULASER ULTIMATE G1 & G2
+        <span class="arrow">▶</span>
+    </div>
+    <ul class="spareparts">
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZALD.BCTL14 - BACK COVER WITH TRANSPARENT LENS 14 HOLES FOR ULTIMATE')">ORDER</button>
+          <img src="ultimate/ZALD-BCTL14.png" alt="IMG" class="spare-img small-image">
+          <span class="spare-text">ZALD.BCTL14 - BACK COVER WITH TRANSPARENT LENS 14 HOLES FOR ULTIMATE</span>
+          <img src="ultimate/ZALD-BCTL14.png" alt="ZALD.BCTL14" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZALD.FCB - FRONT COVER BODY FOR ULTIMATE')">ORDER</button>
+          <img src="ultimate/ZALD-FCB.png" alt="IMG" class="spare-img small-image">
+          <span class="spare-text">ZALD.FCB - FRONT COVER BODY FOR ULTIMATE</span>
+          <img src="ultimate/ZALD-FCB.png" alt="ZALD.FCB" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZALD.FCBG2 - FRONT CASE BODY FOR ULTIMATE G2')">ORDER</button>
+          <img src="ultimate/ZALD-FCBG2.png" alt="IMG" class="spare-img small-image">
+          <span class="spare-text">ZALD.FCBG2 - FRONT CASE BODY FOR ULTIMATE G2</span>
+          <img src="ultimate/ZALD-FCBG2.png" alt="ZALD.FCBG2" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZALD.LB - LITHIUM BATTERY FOR ULTIMATE')">ORDER</button>
+          <img src="ultimate/ZALD-LB.png" alt="IMG" class="spare-img small-image">
+          <span class="spare-text">ZALD.LB - LITHIUM BATTERY FOR ULTIMATE</span>
+          <img src="ultimate/ZALD-LB.png" alt="ZALD.LB" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZALD.LCB - LASER CIRCUIT BOARD FOR ULTIMATE')">ORDER</button>
+          <img src="ultimate/ZALD-LCB.png" alt="IMG" class="spare-img small-image">
+          <span class="spare-text">ZALD.LCB - LASER CIRCUIT BOARD FOR ULTIMATE</span>
+          <img src="ultimate/ZALD-LCB.png" alt="ZALD.LCB" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZALD.LCBG2 - LASER CIRCUIT BOARD FOR ULTIMATE G2')">ORDER</button>
+          <img src="ultimate/ZALD-LCBG2.png" alt="IMG" class="spare-img small-image">
+          <span class="spare-text">ZALD.LCBG2 - LASER CIRCUIT BOARD FOR ULTIMATE G2</span>
+          <img src="ultimate/ZALD-LCBG2.png" alt="ZALD.LCBG2" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZALD.LCD - LCD FOR ULTIMATE')">ORDER</button>
+          <img src="ultimate/ZALD-LCD.png" alt="IMG" class="spare-img small-image">
+          <span class="spare-text">ZALD.LCD - LCD FOR ULTIMATE</span>
+          <img src="ultimate/ZALD-LCD.png" alt="ZALD.LCD" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZALD.LCDG2 - LCD FOR ULTIMATE G2')">ORDER</button>
+          <img src="ultimate/ZALD-LCDG2.png" alt="IMG" class="spare-img small-image">
+          <span class="spare-text">ZALD.LCDG2 - LCD FOR ULTIMATE G2</span>
+          <img src="ultimate/ZALD-LCDG2.png" alt="ZALD.LCDG2" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZALD.LH - LASER HEATSINK FOR ULTIMATE')">ORDER</button>
+          <img src="ultimate/ZALD-LH.png" alt="IMG" class="spare-img small-image">
+          <span class="spare-text">ZALD.LH - LASER HEATSINK FOR ULTIMATE</span>
+          <img src="ultimate/ZALD-LH.png" alt="ZALD.LH" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZALD.MCB - MAIN CIRCUIT BOARD FOR ULTIMATE')">ORDER</button>
+          <img src="ultimate/ZALD-MCB.png" alt="IMG" class="spare-img small-image">
+          <span class="spare-text">ZALD.MCB - MAIN CIRCUIT BOARD FOR ULTIMATE</span>
+          <img src="ultimate/ZALD-MCB.png" alt="ZALD.MCB" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZALD.MCBG2 - MAIN CIRCUIT BOARD FOR ULTIMATE G2')">ORDER</button>
+          <img src="ultimate/ZALD-MCBG2.png" alt="IMG" class="spare-img small-image">
+          <span class="spare-text">ZALD.MCBG2 - MAIN CIRCUIT BOARD FOR ULTIMATE G2</span>
+          <img src="ultimate/ZALD-MCBG2.png" alt="ZALD.MCBG2" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZALD.PBC - PUSH BUTTON COVER FOR ULTIMATE')">ORDER</button>
+          <img src="ultimate/ZALD-PBC.png" alt="IMG" class="spare-img small-image">
+          <span class="spare-text">ZALD.PBC - PUSH BUTTON COVER FOR ULTIMATE</span>
+          <img src="ultimate/ZALD-PBC.png" alt="ZALD.PBC" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZALD.PBCD2 - PUSH BUTTON CASE FOR ULTIMATE G2')">ORDER</button>
+          <img src="ultimate/ZALD-PBCD2.png" alt="IMG" class="spare-img small-image">
+          <span class="spare-text">ZALD.PBCD2 - PUSH BUTTON CASE FOR ULTIMATE G2</span>
+          <img src="ultimate/ZALD-PBCD2.png" alt="ZALD.PBCD2" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZALD.SLED - STICKY LED BACK SCREEN FOR ULTIMATE')">ORDER</button>
+          <img src="ultimate/ZALD-SLED.png" alt="IMG" class="spare-img small-image">
+          <span class="spare-text">ZALD.SLED - STICKY LED BACK SCREEN FOR ULTIMATE</span>
+          <img src="ultimate/ZALD-SLED.png" alt="ZALD.SLED" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZALD.SMDP - SMD PUSH BUTTON FOR ULTIMATE')">ORDER</button>
+          <img src="ultimate/ZALD-SMDP.png" alt="IMG" class="spare-img small-image">
+          <span class="spare-text">ZALD.SMDP - SMD PUSH BUTTON FOR ULTIMATE</span>
+          <img src="ultimate/ZALD-SMDP.png" alt="ZALD.SMDP" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZALD.SMDPG2 - SMD PUSH BUTTON FOR ULTIMATE G2')">ORDER</button>
+          <img src="ultimate/ZALD-SMDPG2.png" alt="IMG" class="spare-img small-image">
+          <span class="spare-text">ZALD.SMDPG2 - SMD PUSH BUTTON FOR ULTIMATE G2</span>
+          <img src="ultimate/ZALD-SMDPG2.png" alt="ZALD.SMDPG2" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZALD.TLDSG1 - TRANSPARENT LENS OF DISPLAY SCREEN FOR ULTIMATE G1')">ORDER</button>
+          <img src="ultimate/ZALD-TLDSG1.png" alt="IMG" class="spare-img small-image">
+          <span class="spare-text">ZALD.TLDSG1 - TRANSPARENT LENS OF DISPLAY SCREEN FOR ULTIMATE G1</span>
+          <img src="ultimate/ZALD-TLDSG1.png" alt="ZALD.TLDSG1" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZALD.TLDSG2 - TRANSPARENT LENS OF DISPLAY SCREEN FOR ULTIMATE G2')">ORDER</button>
+          <img src="ultimate/ZALD-TLDSG2.png" alt="IMG" class="spare-img small-image">
+          <span class="spare-text">ZALD.TLDSG2 - TRANSPARENT LENS OF DISPLAY SCREEN FOR ULTIMATE G2</span>
+          <img src="ultimate/ZALD-TLDSG2.png" alt="ZALD.TLDSG2" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZALU.A - ADAPTOR FOR ACULASER')">ORDER</button>
+          <img src="ultimate/ZALU-A.png" alt="IMG" class="spare-img small-image">
+          <span class="spare-text">ZALU.A - ADAPTOR FOR ACULASER</span>
+          <img src="ultimate/ZALU-A.png" alt="ZALU.A" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZALU.BGL - BLUE GENERATING LASER FOR ACULASER')">ORDER</button>
+          <img src="ultimate/ZALU-BGL.png" alt="IMG" class="spare-img small-image">
+          <span class="spare-text">ZALU.BGL - BLUE GENERATING LASER FOR ACULASER</span>
+          <img src="ultimate/ZALU-BGL.png" alt="ZALU.BGL" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZALU.BOLT - BOLT FOR ACULASER')">ORDER</button>
+          <img src="ultimate/ZALU-BOLT.png" alt="IMG" class="spare-img small-image">
+          <span class="spare-text">ZALU.BOLT - BOLT FOR ACULASER</span>
+          <img src="ultimate/ZALU-BOLT.png" alt="ZALU.BOLT" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZALU.BZ - MICRO BUZZER FOR ACULASER')">ORDER</button>
+          <img src="ultimate/ZALU-BZ.png" alt="IMG" class="spare-img small-image">
+          <span class="spare-text">ZALU.BZ - MICRO BUZZER FOR ACULASER</span>
+          <img src="ultimate/ZALU-BZ.png" alt="ZALU.BZ" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZALU.CIC - CHARGING IC FOR HJG65D')">ORDER</button>
+          <img src="ultimate/ZALU-CIC.png" alt="IMG" class="spare-img small-image">
+          <span class="spare-text">ZALU.CIC - CHARGING IC FOR HJG65D</span>
+          <img src="ultimate/ZALU-CIC.png" alt="ZALU.CIC" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZALU.EMSS - EMS SOCKET FOR HJG65D')">ORDER</button>
+          <img src="ultimate/ZALU-EMSS.png" alt="IMG" class="spare-img small-image">
+          <span class="spare-text">ZALU.EMSS - EMS SOCKET FOR HJG65D</span>
+          <img src="ultimate/ZALU-EMSS.png" alt="ZALU.EMSS" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZALU.LEDB - LED BACKSCREEN FOR ACULASER')">ORDER</button>
+          <img src="ultimate/ZALU-LEDB.png" alt="IMG" class="spare-img small-image">
+          <span class="spare-text">ZALU.LEDB - LED BACKSCREEN FOR ACULASER</span>
+          <img src="ultimate/ZALU-LEDB.png" alt="ZALU.LEDB" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZALU.N - NEEDLE ACULASER FOR ACULASER')">ORDER</button>
+          <img src="ultimate/ZALU-N.png" alt="IMG" class="spare-img small-image">
+          <span class="spare-text">ZALU.N - NEEDLE ACULASER FOR ACULASER</span>
+          <img src="ultimate/ZALU-N.png" alt="ZALU.N" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZALU.PCC - PAIN PROBE CABLE TYPE C ACULASER')">ORDER</button>
+          <img src="ultimate/ZALU-PCC.png" alt="IMG" class="spare-img small-image">
+          <span class="spare-text">ZALU.PCC - PAIN PROBE CABLE TYPE C ACULASER</span>
+          <img src="ultimate/ZALU-PCC.png" alt="ZALU.PCC" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZALU.PI - POWER INDUCTOR 2.2MH FOR ACULASER')">ORDER</button>
+          <img src="ultimate/ZALU-PI.png" alt="IMG" class="spare-img small-image">
+          <span class="spare-text">ZALU.PI - POWER INDUCTOR 2.2MH FOR ACULASER</span>
+          <img src="ultimate/ZALU-PI.png" alt="ZALU.PI" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZALU.RGL - RED GENERATING LASER FOR ACULASER')">ORDER</button>
+          <img src="ultimate/ZALU-RGL.png" alt="IMG" class="spare-img small-image">
+          <span class="spare-text">ZALU.RGL - RED GENERATING LASER FOR ACULASER</span>
+          <img src="ultimate/ZALU-RGL.png" alt="ZALU.RGL" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZALU.SI - SILICON INTRANASAL FOR ACULASER')">ORDER</button>
+          <img src="ultimate/ZALU-SI.png" alt="IMG" class="spare-img small-image">
+          <span class="spare-text">ZALU.SI - SILICON INTRANASAL FOR ACULASER</span>
+          <img src="ultimate/ZALU-SI.png" alt="ZALU.SI" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZALU.SIC - SOT IC FOR ACULASER')">ORDER</button>
+          <img src="ultimate/ZALU-SIC.png" alt="IMG" class="spare-img small-image">
+          <span class="spare-text">ZALU.SIC - SOT IC FOR ACULASER</span>
+          <img src="ultimate/ZALU-SIC.png" alt="ZALU.SIC" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZALU.SMDC - SMD CAPACITOR FOR ACULASER')">ORDER</button>
+          <img src="ultimate/ZALU-SMDC.png" alt="IMG" class="spare-img small-image">
+          <span class="spare-text">ZALU.SMDC - SMD CAPACITOR FOR ACULASER</span>
+          <img src="ultimate/ZALU-SMDC.png" alt="ZALU.SMDC" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZALU.SMDD - SMD DIODE FOR ACULASER')">ORDER</button>
+          <img src="ultimate/ZALU-SMDD.png" alt="IMG" class="spare-img small-image">
+          <span class="spare-text">ZALU.SMDD - SMD DIODE FOR ACULASER</span>
+          <img src="ultimate/ZALU-SMDD.png" alt="ZALU.SMDD" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZALU.SMDT - SMD TRANSISTOR FOR ACULASER')">ORDER</button>
+          <img src="ultimate/ZALU-SMDT.png" alt="IMG" class="spare-img small-image">
+          <span class="spare-text">ZALU.SMDT - SMD TRANSISTOR FOR ACULASER</span>
+          <img src="ultimate/ZALU-SMDT.png" alt="ZALU.SMDT" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZALU.TCS - TYPE C SOCKET FOR ACULASER')">ORDER</button>
+          <img src="ultimate/ZALU-TCS.png" alt="IMG" class="spare-img small-image">
+          <span class="spare-text">ZALU.TCS - TYPE C SOCKET FOR ACULASER</span>
+          <img src="ultimate/ZALU-TCS.png" alt="ZALU.TCS" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZALU.USBC - USB CABLE C TYPE FOR ACULASER')">ORDER</button>
+          <img src="ultimate/ZALU-USBC.png" alt="IMG" class="spare-img small-image">
+          <span class="spare-text">ZALU.USBC - USB CABLE C TYPE FOR ACULASER</span>
+          <img src="ultimate/ZALU-USBC.png" alt="ZALU.USBC" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZALU.VRIC - VOLTAGE REGULATOR IC')">ORDER</button>
+          <img src="ultimate/ZALU-VRIC.png" alt="IMG" class="spare-img small-image">
+          <span class="spare-text">ZALU.VRIC - VOLTAGE REGULATOR IC</span>
+          <img src="ultimate/ZALU-VRIC.png" alt="ZALU.VRIC" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZALU.WB - WATCHBAND ACULASER FOR ACULASER (NEW MODEL)')">ORDER</button>
+          <img src="ultimate/ZALU-WB.png" alt="IMG" class="spare-img small-image">
+          <span class="spare-text">ZALU.WB - WATCHBAND ACULASER FOR ACULASER (NEW MODEL)</span>
+          <img src="ultimate/ZALU-WB.png" alt="ZALU.WB" class="large-image">
+        </li>
+        
+        <li onclick="showImage(this)">
+          <button class="btn-add" onclick="event.stopPropagation(); flyToCart(this); addToCart('ZALU.YGL - YELLOW GENERATING LASER FOR ACULASER')">ORDER</button>
+          <img src="ultimate/ZALU-YGL.png" alt="IMG" class="spare-img small-image">
+          <span class="spare-text">ZALU.YGL - YELLOW GENERATING LASER FOR ACULASER</span>
+          <img src="ultimate/ZALU-YGL.png" alt="ZALU.YGL" class="large-image">
+        </li>
+        
+    </ul>
+
+    <br>
+    <a href="index.html" class="btn">Kembali</a>
+
+    <script>
+        const cartIcon = document.getElementById('cart-icon');
+        const cartSidebar = document.getElementById('cart-sidebar');
+        const cartCount = document.getElementById('cart-count');
+        const cartItemsDiv = document.getElementById('cart-items');
+        
+        
+        let cart = JSON.parse(localStorage.getItem('cartData')) || [];
+        updateCartDisplay();
+        
+        
+        cartIcon.addEventListener('click', () => {
+        cartSidebar.classList.toggle('open');
+        });
+        
+        
+        function toggleSpareparts(index) {
+        const lists = document.querySelectorAll('.spareparts');
+        lists[index].classList.toggle('open');
+        }
+        
+        
+        function addToCart(item) {
+        const existing = cart.find(i => i.name === item);
+        if (existing) {
+        existing.qty++;
+        } else {
+        cart.push({ name: item, qty: 1 });
+        }
+        localStorage.setItem('cartData', JSON.stringify(cart));
+        updateCartDisplay();
+        }
+        
+        
+        function removeItem(name) {
+        cart = cart.filter(i => i.name !== name);
+        localStorage.setItem('cartData', JSON.stringify(cart));
+        updateCartDisplay();
+        }
+        
+        
+        function updateCartDisplay() {
+        cartItemsDiv.innerHTML = '';
+        let total = 0;
+        cart.forEach(i => {
+        total += i.qty;
+        const div = document.createElement('div');
+        div.classList.add('cart-item');
+        div.innerHTML = `<span>${i.name} (x${i.qty})</span><button class='remove-btn' onclick="removeItem('${i.name}')">❌</button>`;
+        cartItemsDiv.appendChild(div);
+        });
+        cartCount.textContent = total;
+        }
+        
+        
+        document.getElementById('checkout-btn').addEventListener('click', () => {
+        if (cart.length === 0) {
+        alert('Keranjang masih kosong!');
+        return;
+        }
+        let message = 'Halo, saya ingin memesan sparepart berikut:%0A';
+        cart.forEach((i, idx) => {
+        message += `${idx + 1}. ${i.name} (x${i.qty})%0A`;
+        });
+        const phone = '6285887588346'; // nomor WA tujuan
+        window.open(`https://wa.me/${phone}?text=${message}`, '_blank');
+});
+        function toggleSpareparts(index) {
+            let allLists = document.querySelectorAll(".spareparts");
+            let allArrows = document.querySelectorAll(".arrow");
+
+            allLists.forEach((list, i) => {
+                if (i === index) {
+                    list.classList.toggle("open");
+                    allArrows[i].classList.toggle("rotate");
+                } else {
+                    list.classList.remove("open");
+                    allArrows[i].classList.remove("rotate");
+                }
+            });
+        }
+
+        function showImage(element) {
+            const largeImage = element.querySelector('.large-image');
+            const smallImage = element.querySelector('.small-image');
+            const spareText = element.querySelector('.spare-text');
+
+            // Cek apakah gambar besar sudah ditampilkan
+        if (largeImage.style.display === 'block') {
+            // Jika gambar besar sudah ditampilkan, sembunyikan dan tampilkan gambar kecil serta teks
+            largeImage.style.display = 'none';
+            smallImage.style.display = 'block';
+            spareText.style.display = 'block';
+        } else {
+        // Jika gambar besar belum ditampilkan, tampilkan gambar besar dan sembunyikan gambar kecil serta teks
+        largeImage.style.display = 'block';
+        smallImage.style.display = 'none';
+        spareText.style.display = 'none';
+        }
+        }
+        document.getElementById("searchBox").addEventListener("input", function() {
+            let filter = this.value.toLowerCase();
+            let allLists = document.querySelectorAll(".spareparts");
+            let allArrows = document.querySelectorAll(".arrow");
+
+            allLists.forEach((list, i) => {
+                let items = list.querySelectorAll("li");
+                let adaYangCocok = false;
+
+                items.forEach(item => {
+                    let text = item.textContent.toLowerCase();
+                    if (text.includes(filter)) {
+                        item.style.display = "";
+                        adaYangCocok = true;
+                    } else {
+                        item.style.display = "none";
+                    }
+                });
+
+                if (filter === "") {
+                    list.classList.remove("open");
+                    allArrows[i].classList.remove("rotate");
+                } else if (adaYangCocok) {
+                    list.classList.add("open");
+                    allArrows[i].classList.add("rotate");
+                } else {
+                    list.classList.remove("open");
+                    allArrows[i].classList.remove("rotate");
+                }
+            });
+        });
+
+    function flyToCart(btn) {
+      const cartIcon = document.getElementById("cart-icon");
+      const productImg = btn.parentElement.querySelector(".spare-img");
+      
+      if (!productImg) return;
+    
+      // clone gambar
+      const imgClone = productImg.cloneNode(true);
+      const imgRect = productImg.getBoundingClientRect();
+      const cartRect = cartIcon.getBoundingClientRect();
+    
+      // gaya awal clone
+      imgClone.style.position = "fixed";
+      imgClone.style.left = imgRect.left + "px";
+      imgClone.style.top = imgRect.top + "px";
+      imgClone.style.width = "40px";
+      imgClone.style.height = "40px";
+      imgClone.style.borderRadius = "8px";
+      imgClone.style.transition = "all 0.8s ease-in-out";
+      imgClone.style.zIndex = "2000";
+    
+      document.body.appendChild(imgClone);
+    
+       // Animasi terbang ke keranjang
+      setTimeout(() => {
+        imgClone.style.left = cartRect.left + cartRect.width / 2 + "px";
+        imgClone.style.top = cartRect.top + "px";
+        imgClone.style.width = "10px";
+        imgClone.style.height = "10px";
+        imgClone.style.opacity = "0.3";
+      }, 10);
+    
+      // Hapus clone + getar ikon setelah animasi
+      setTimeout(() => {
+        imgClone.remove();
+        cartIcon.classList.add("cart-shake");
+        setTimeout(() => cartIcon.classList.remove("cart-shake"), 400);
+      }, 900);
+    }
+
+     document.getElementById("print-btn").addEventListener("click", function() {
+  const items = document.querySelectorAll("#cart-items .cart-item");
+
+  // ambil nama produk & nomor SN dari input (kita tambahkan di sidebar cart)
+  const productName = document.getElementById("productName")?.value?.trim() || "-";
+  const serialNumber = document.getElementById("serialNumber")?.value?.trim() || "-";
+  const Keterangan = document.getElementById("Keterangan")?.value?.trim() || "-";
+
+  let tableRows = "";
+  items.forEach((item, index) => {
+    const text = item.querySelector("span").textContent.trim();
+    const parts = text.split(" - ");
+    const code = parts[0] || "";
+    let name = parts[1] || "";
+    let qty = "1";
+
+    const qtyMatch = name.match(/\(x(\d+)\)/);
+    if (qtyMatch) {
+      qty = qtyMatch[1];
+      name = name.replace(/\(x\d+\)/, "").trim();
+    }
+
+    tableRows += `
+      <tr>
+        <td>${index + 1}</td>
+        <td>${code}</td>
+        <td>${name}</td>
+        <td>${qty}</td>
+      </tr>
+    `;
+  });
+
+  // tanggal dan jam otomatis
+  const now = new Date();
+  const tanggal = now.toLocaleDateString('id-ID', { day: '2-digit', month: 'long', year: 'numeric' });
+  const jam = now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+
+  const printWindow = window.open('', '', 'width=500,height=300');
+  printWindow.document.write(`
+    <html>
+    <head>
+      <title>Print Sparepart Verimark</title>
+      <style>
+        body {
+          font-family: 'Montserrat', sans-serif;
+          color: #222;
+          padding: 10px;
+          background: #fff;
+          font-size: 9px
+        }
+        .wrapper {
+          border: 2px solid #6a0dad;
+          border-radius: 2px;
+          padding: 5px 10px;
+        }
+        h2 {
+          text-align: center;
+          color: #6a0dad;
+          margin-bottom: 10px;
+          text-transform: uppercase;
+        }
+        .info {
+          margin-bottom: 10px;
+          font-size: 12px;
+        }
+        table {
+          width: 100%;
+          border-collapse: collapse;
+        }
+        th, td {
+          border: 1px solid #ccc;
+          padding: 6px;
+          text-align: left;
+          font-size: 9px;
+        }
+        th {
+          background-color: #f0e6ff;
+          color: #333;
+        }
+        tr:nth-child(even) {
+          background-color: #faf8ff;
+        }
+        .footer {
+          text-align: left;
+          margin-top: 5px;
+          font-size: 9px;
+          color: #333;
+        }
+        .sign-section {
+          margin-top: 5px;
+          display: flex;
+          justify-content: space-around;
+          text-align: center;
+        }
+        .sign-box {
+          width: 30%;
+        }
+        .sign-box .line {
+          margin-top: 40px;
+          border-top: 1px solid #333;
+          width: 100%;
+        }
+      </style>
+    </head>
+    <body>
+      <div class="wrapper">
+        <h2>FORM PERMINTAAN SPAREPART</h2>
+        <div class="info">
+          <p><strong>Nama Produk:</strong> ${productName}</p>
+          <p><strong>Nomor SN:</strong> ${serialNumber}</p>
+          <p><strong>Keterangan:</strong> ${Keterangan}</p>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>No</th>
+              <th>Kode</th>
+              <th>Nama Sparepart</th>
+              <th>Qty</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${tableRows}
+          </tbody>
+        </table>
+        <div class="footer">
+          <p><strong>Tanggal cetak:</strong> ${tanggal} — <strong>Jam:</strong> ${jam}</p>
+          <p>Dicetak dari sistem internal Verimark</p>
+        </div>
+        <div class="sign-section">
+          <div class="sign-box">
+            <p><strong>Dibuat oleh</strong></p>
+            <div class="line"></div>
+          </div>
+          <div class="sign-box">
+            <p><strong>Mengetahui</strong></p>
+            <div class="line"></div>
+          </div>
+          <div class="sign-box">
+            <p><strong>Menyetujui</strong></p>
+            <div class="line"></div>
+          </div>
+        </div>
+      </div>
+      <script>window.print();<\/script>
+    </body>
+    </html>
+  `);
+  printWindow.document.close();
+}); 
+
+        // Cek apakah sudah login
+  if (localStorage.getItem("isLoggedIn") !== "true") {
+    alert("Kamu harus login dulu sebelum mengakses halaman ini!");
+    window.location.href = "login.html";
+  }
+
+// Cek login
+  if (localStorage.getItem("isLoggedIn") !== "true") {
+    window.location.href = "login.html";
+  }
+
+  // Tombol logout
+  document.getElementById("logoutBtn").addEventListener("click", function() {
+    localStorage.removeItem("isLoggedIn");
+    alert("Kamu sudah logout 👋");
+    window.location.href = "login.html";
+  });
+        
+    </script>
+    </div>
+</body>
+</html>
+
+
+
+
+
