@@ -2908,6 +2908,9 @@ h1, h2, h3, h4, h5, h6 {
       const imgClone = productImg.cloneNode(true);
       const imgRect = productImg.getBoundingClientRect();
       const cartRect = cartIcon.getBoundingClientRect();
+        
+      // *** Tambahkan class active (ubah posisi cart jadi ke pojok) ***
+      cartIcon.classList.add("active");
     
       // gaya awal clone
       imgClone.style.position = "fixed";
